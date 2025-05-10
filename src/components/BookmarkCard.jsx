@@ -5,13 +5,15 @@ import { Badge } from '@/components/ui/badge';
 import { Trash2, ExternalLink, Clock } from 'lucide-react';
 import { useBookmarkContext } from '@/context/BookmarkContext';
 import { formatDistanceToNow } from 'date-fns';
-import PropTypes from 'prop-types'; // Added for runtime type checking
+import PropTypes from 'prop-types';
 
 const BookmarkCard = ({ bookmark }) => {
   const { removeBookmark } = useBookmarkContext();
   const [isHovering, setIsHovering] = useState(false);
   
-  const formattedDate = formatDistanceToNow(new Date(bookmark.createdAt), { addSuffix: true });
+  const formattedDate = bookmark.createdAt ? 
+    formatDistanceToNow(new Date(bookmark.createdAt), { addSuffix: true }) : 
+    'Unknown date';
   
   const handleRemoveClick = (e) => {
     e.preventDefault();
@@ -20,7 +22,9 @@ const BookmarkCard = ({ bookmark }) => {
   };
   
   const handleCardClick = () => {
-    window.open(bookmark.url, '_blank');
+    if (bookmark.url) {
+      window.open(bookmark.url, '_blank');
+    }
   };
   
   return (
@@ -38,7 +42,9 @@ const BookmarkCard = ({ bookmark }) => {
           />
         ) : (
           <div className="h-40 w-full bg-gradient-to-r from-bookmark-primary to-bookmark-secondary flex items-center justify-center">
-            <span className="text-white font-bold text-xl">{bookmark.title.substring(0, 1)}</span>
+            <span className="text-white font-bold text-xl">
+              {bookmark.title ? bookmark.title.substring(0, 1).toUpperCase() : '?'}
+            </span>
           </div>
         )}
         
@@ -68,7 +74,7 @@ const BookmarkCard = ({ bookmark }) => {
               }} 
             />
           )}
-          <h3 className="font-medium line-clamp-2">{bookmark.title}</h3>
+          <h3 className="font-medium line-clamp-2">{bookmark.title || 'Untitled Bookmark'}</h3>
         </div>
         
         {bookmark.description && (
@@ -77,16 +83,16 @@ const BookmarkCard = ({ bookmark }) => {
         
         <div className="flex flex-wrap gap-1 mt-2">
           <Badge variant="outline" className="bg-bookmark-light text-bookmark-primary">
-            {bookmark.category}
+            {bookmark.category || 'uncategorized'}
           </Badge>
           
-          {bookmark.tags.slice(0, 2).map((tag) => (
+          {bookmark.tags?.slice(0, 2).map((tag) => (
             <Badge key={tag} variant="outline" className="bg-gray-100">
               {tag}
             </Badge>
           ))}
           
-          {bookmark.tags.length > 2 && (
+          {bookmark.tags?.length > 2 && (
             <Badge variant="outline" className="bg-gray-100">
               +{bookmark.tags.length - 2}
             </Badge>
@@ -101,7 +107,7 @@ const BookmarkCard = ({ bookmark }) => {
         </div>
         
         <div className="flex items-center gap-1">
-          <span className="italic">{bookmark.source}</span>
+          <span className="italic">{bookmark.source || 'unknown'}</span>
           <ExternalLink className="h-3 w-3" />
         </div>
       </CardFooter>
@@ -109,19 +115,19 @@ const BookmarkCard = ({ bookmark }) => {
   );
 };
 
-// Optional: Add PropTypes for runtime type checking
+// PropTypes for runtime type checking
 BookmarkCard.propTypes = {
   bookmark: PropTypes.shape({
     id: PropTypes.string.isRequired,
-    url: PropTypes.string.isRequired,
-    title: PropTypes.string.isRequired,
+    url: PropTypes.string,
+    title: PropTypes.string,
     description: PropTypes.string,
     thumbnail: PropTypes.string,
     favicon: PropTypes.string,
-    category: PropTypes.string.isRequired,
-    tags: PropTypes.arrayOf(PropTypes.string).isRequired,
-    source: PropTypes.string.isRequired,
-    createdAt: PropTypes.oneOfType([PropTypes.string, PropTypes.instanceOf(Date)]).isRequired
+    category: PropTypes.string,
+    tags: PropTypes.arrayOf(PropTypes.string),
+    source: PropTypes.string,
+    createdAt: PropTypes.oneOfType([PropTypes.string, PropTypes.instanceOf(Date)])
   }).isRequired
 };
 

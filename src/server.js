@@ -1,132 +1,245 @@
 import express from 'express';
-import { fileURLToPath } from 'url';
-import { dirname, join } from 'path';
 import cors from 'cors';
 import { v4 as uuidv4 } from 'uuid';
+import { promises as fs } from 'fs';
+import { fileURLToPath } from 'url';
+import { dirname, join } from 'path';
+import axios from 'axios';
+import dotenv from 'dotenv';
+import natural from 'natural';
+
+dotenv.config();
 
 const __dirname = dirname(fileURLToPath(import.meta.url));
-const bookmarks = [];
+const DATA_FILE = join(__dirname, 'bookmarks.json');
 
-async function startServer() {
-  const app = express();
+const app = express();
+const port = process.env.PORT || 3000;
 
-  // Fixed CORS configuration
-  app.use(cors({
-    origin: function (origin, callback) {
-      if (!origin) return callback(null, true);
-      if (
-        origin === 'http://localhost:5173' ||
-        origin === 'http://localhost:3000' ||
-        origin.startsWith('chrome-extension://')
-      ) {
-        return callback(null, true);
-      }
-      return callback(new Error('Not allowed by CORS'));
-    },
-    methods: ['GET', 'POST', 'DELETE'],
-    allowedHeaders: ['Content-Type', 'Authorization'],
-    credentials: true // Important if you'll be using cookies/sessions
-  }));
+// Initialize natural language processing tools
+const tokenizer = new natural.WordTokenizer();
+const TfIdf = natural.TfIdf;
+const tfidf = new TfIdf();
 
-  // Apply JSON middleware globally for all POST/PUT requests
-  app.use(express.json());
+// Middleware
+app.use(cors({
+  origin: ['http://localhost:5173', 'chrome-extension://*'],
+  methods: ['GET', 'POST', 'DELETE'],
+  allowedHeaders: ['Content-Type']
+}));
+app.use(express.json());
 
-  // API routes
-  app.get('/api/health', (req, res) => {
-    res.status(200).json({ status: 'ok', timestamp: new Date().toISOString() });
-  });
-
-  // Helper: categorize bookmark
-  function autoCategorize(bookmark) {
-    // Use folder/category if present
-    if (bookmark.category && bookmark.category !== 'other') return bookmark.category;
-    // Use domain-based simple rules
-    const url = bookmark.url || '';
-    if (url.includes('github.com') || url.includes('dev.to') || url.includes('stackoverflow.com')) return 'Development';
-    if (url.includes('youtube.com') || url.includes('netflix.com')) return 'Entertainment';
-    if (url.includes('medium.com') || url.includes('wikipedia.org')) return 'Research';
-    if (url.includes('linkedin.com')) return 'Work';
-    if (url.includes('dribbble.com') || url.includes('behance.net')) return 'Design';
-    // Default
-    return 'Other';
-  }
-
-  app.post('/api/bookmarks', async (req, res) => {
-    try {
-      const bookmarkData = req.body;
-      if (!bookmarkData.url || !bookmarkData.title) {
-        return res.status(400).json({ error: 'URL and title are required' });
-      }
-
-      const newBookmark = {
-        ...bookmarkData,
-        id: uuidv4(),
-        createdAt: new Date().toISOString(),
-        lastVisited: new Date().toISOString(),
-        category: bookmarkData.category || 'other',
-        tags: bookmarkData.tags || [],
-        source: 'extension'
-      };
-
-      bookmarks.push(newBookmark);
-
-      res.status(200).json({ success: true, bookmark: newBookmark });
-    } catch (error) {
-      console.error('Error processing bookmark:', error);
-      res.status(500).json({ error: 'Failed to process bookmark' });
+// Helper function to read bookmarks from file
+async function readBookmarks() {
+  try {
+    const data = await fs.readFile(DATA_FILE, 'utf8');
+    return JSON.parse(data);
+  } catch (error) {
+    // If file doesn't exist or is empty, return empty array
+    if (error.code === 'ENOENT') {
+      await fs.writeFile(DATA_FILE, '[]', 'utf8');
+      return [];
     }
-  });
-
-  app.post('/api/bookmarks/import', async (req, res) => {
-    try {
-      const imported = [];
-      const bookmarksToImport = req.body.bookmarks || [];
-      for (const b of bookmarksToImport) {
-        if (!b.url || !b.title) continue;
-        const newBookmark = {
-          ...b,
-          id: uuidv4(),
-          createdAt: new Date().toISOString(),
-          lastVisited: new Date().toISOString(),
-          category: autoCategorize(b),
-          tags: b.tags || [],
-          source: 'import'
-        };
-        bookmarks.push(newBookmark);
-        imported.push(newBookmark);
-      }
-      res.status(200).json({ success: true, importedCount: imported.length, imported });
-    } catch (error) {
-      console.error('Error importing bookmarks:', error);
-      res.status(500).json({ error: 'Failed to import bookmarks' });
-    }
-  });
-
-  app.get('/api/bookmarks', (req, res) => {
-    res.status(200).json(bookmarks);
-  });
-
-  // Vite middleware in development
-  if (process.env.NODE_ENV !== 'production') {
-    const { createServer } = await import('vite');
-    const vite = await createServer({
-      root: process.cwd(),
-      server: { middlewareMode: true },
-      appType: 'custom'
-    });
-    app.use(vite.middlewares);
-  } else {
-    // Serve static files in production
-    app.use(express.static(join(__dirname, '../dist')));
-    app.use('*', (req, res) => {
-      res.sendFile(join(__dirname, '../dist', 'index.html'));
-    });
+    throw error;
   }
-
-  const PORT = process.env.PORT || 3000;
-  app.listen(PORT, () => {
-    console.log(`Server running at http://localhost:${PORT}`);
-  });
 }
 
-startServer().catch(console.error);
+// Helper function to write bookmarks to file
+async function writeBookmarks(bookmarks) {
+  await fs.writeFile(DATA_FILE, JSON.stringify(bookmarks, null, 2), 'utf8');
+}
+
+// AI-powered bookmark analysis
+async function analyzeBookmark(bookmark) {
+  const { title = '', url = '', description = '' } = bookmark;
+  const text = `${title} ${description}`.toLowerCase();
+
+  try {
+    // 1. Category Classification using Zero-shot Classification
+    const categoryResponse = await axios.post(
+      'https://api-inference.huggingface.co/models/facebook/bart-large-mnli',
+      {
+        inputs: text,
+        parameters: {
+          candidate_labels: [
+            'development', 'design', 'research', 'entertainment', 
+            'work', 'education', 'news', 'technology', 'other'
+          ]
+        }
+      },
+      {
+        headers: {
+          'Authorization': `Bearer ${process.env.HUGGINGFACE_API_KEY}`,
+          'Content-Type': 'application/json'
+        }
+      }
+    );
+
+    // 2. Topic Extraction using Text Generation
+    const topicResponse = await axios.post(
+      'https://api-inference.huggingface.co/models/gpt2',
+      {
+        inputs: `Extract key topics from: ${text}`,
+        parameters: {
+          max_length: 50,
+          num_return_sequences: 1
+        }
+      },
+      {
+        headers: {
+          'Authorization': `Bearer ${process.env.HUGGINGFACE_API_KEY}`,
+          'Content-Type': 'application/json'
+        }
+      }
+    );
+
+    // 3. Sentiment Analysis
+    const sentimentResponse = await axios.post(
+      'https://api-inference.huggingface.co/models/finiteautomata/bertweet-base-sentiment-analysis',
+      {
+        inputs: text
+      },
+      {
+        headers: {
+          'Authorization': `Bearer ${process.env.HUGGINGFACE_API_KEY}`,
+          'Content-Type': 'application/json'
+        }
+      }
+    );
+
+    // Process category results
+    const { labels, scores } = categoryResponse.data;
+    const bestCategory = labels[scores.indexOf(Math.max(...scores))];
+
+    // Process topic results
+    const topics = tokenizer.tokenize(topicResponse.data[0].generated_text)
+      .filter(word => word.length > 3)
+      .slice(0, 5);
+
+    // Process sentiment
+    const sentiment = sentimentResponse.data[0][0].label;
+
+    // Generate summary using TF-IDF
+    tfidf.addDocument(text);
+    const summaryTerms = tfidf.listTerms(0)
+      .slice(0, 3)
+      .map(item => item.term);
+    
+    const summary = `${title}. ${description}`.substring(0, 200);
+
+    return {
+      category: bestCategory,
+      tags: topics,
+      sentiment,
+      summary,
+      confidence: {
+        category: Math.max(...scores),
+        sentiment: sentimentResponse.data[0][0].score
+      }
+    };
+  } catch (error) {
+    console.error('AI analysis error:', error);
+    // Fallback to basic analysis if AI fails
+    return {
+      category: 'other',
+      tags: tokenizer.tokenize(text).slice(0, 5),
+      sentiment: 'neutral',
+      summary: description || title,
+      confidence: {
+        category: 0,
+        sentiment: 0
+      }
+    };
+  }
+}
+
+// AI enrichment endpoint
+app.post('/api/bookmarks/ai-enrich', async (req, res) => {
+  try {
+    const enriched = await analyzeBookmark(req.body);
+    res.json(enriched);
+  } catch (error) {
+    console.error('AI enrichment error:', error);
+    res.status(500).json({ error: 'Failed to enrich bookmark' });
+  }
+});
+
+// GET all bookmarks
+app.get('/api/bookmarks', async (req, res) => {
+  try {
+    const bookmarks = await readBookmarks();
+    res.json(bookmarks);
+  } catch (error) {
+    console.error('Error reading bookmarks:', error);
+    res.status(500).json({ error: 'Failed to read bookmarks' });
+  }
+});
+
+// POST new bookmark
+app.post('/api/bookmarks', async (req, res) => {
+  try {
+    const bookmarks = await readBookmarks();
+    const bookmark = {
+      id: uuidv4(),
+      ...req.body,
+      createdAt: new Date().toISOString(),
+      lastVisited: new Date().toISOString()
+    };
+    bookmarks.push(bookmark);
+    await writeBookmarks(bookmarks);
+    res.status(201).json({ bookmark });
+  } catch (error) {
+    console.error('Error adding bookmark:', error);
+    res.status(500).json({ error: 'Failed to add bookmark' });
+  }
+});
+
+// DELETE bookmark
+app.delete('/api/bookmarks/:id', async (req, res) => {
+  try {
+    const { id } = req.params;
+    const bookmarks = await readBookmarks();
+    const initialLength = bookmarks.length;
+    const filteredBookmarks = bookmarks.filter(bookmark => bookmark.id !== id);
+    
+    if (filteredBookmarks.length === initialLength) {
+      return res.status(404).json({ error: 'Bookmark not found' });
+    }
+    
+    await writeBookmarks(filteredBookmarks);
+    res.status(200).json({ message: 'Bookmark deleted successfully' });
+  } catch (error) {
+    console.error('Error deleting bookmark:', error);
+    res.status(500).json({ error: 'Failed to delete bookmark' });
+  }
+});
+
+// Bulk import bookmarks
+app.post('/api/bookmarks/import', async (req, res) => {
+  try {
+    const bookmarks = await readBookmarks();
+    const importedBookmarks = req.body.map(bookmark => ({
+      id: uuidv4(),
+      ...bookmark,
+      createdAt: new Date().toISOString(),
+      lastVisited: new Date().toISOString()
+    }));
+    
+    const updatedBookmarks = [...bookmarks, ...importedBookmarks];
+    await writeBookmarks(updatedBookmarks);
+    res.status(201).json({ bookmarks: importedBookmarks });
+  } catch (error) {
+    console.error('Error importing bookmarks:', error);
+    res.status(500).json({ error: 'Failed to import bookmarks' });
+  }
+});
+
+// Error handling middleware
+app.use((err, req, res, next) => {
+  console.error(err.stack);
+  res.status(500).json({ error: 'Something broke!' });
+});
+
+app.listen(port, () => {
+  console.log(`Server running at http://localhost:${port}`);
+});

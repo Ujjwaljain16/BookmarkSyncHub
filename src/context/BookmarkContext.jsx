@@ -94,16 +94,36 @@ export const BookmarkProvider = ({ children }) => {
   useEffect(() => {
     const loadBookmarks = async () => {
       try {
-        const res = await fetch(API_URL);
+        dispatch({ type: 'SET_LOADING', payload: true });
+        
+        const res = await fetch(API_URL, {
+          method: 'GET',
+          headers: {
+            'Content-Type': 'application/json',
+          },
+          // No credentials needed unless you're using authentication
+        });
+        
+        if (!res.ok) {
+          throw new Error(`HTTP error! Status: ${res.status}`);
+        }
+        
         const bookmarks = await res.json();
         dispatch({ type: 'SET_BOOKMARKS', payload: bookmarks });
-        dispatch({ type: 'SET_LOADING', payload: false });
       } catch (error) {
         console.error('Failed to load bookmarks:', error);
-        toast.error('Failed to load bookmarks');
+        toast.error(`Failed to load bookmarks: ${error.message}`);
+        
+        // If API is unavailable, load mock data
+        if (error.message.includes('Failed to fetch')) {
+          console.log('Loading mock bookmarks instead');
+          dispatch({ type: 'SET_BOOKMARKS', payload: mockBookmarks });
+        }
+      } finally {
         dispatch({ type: 'SET_LOADING', payload: false });
       }
     };
+    
     loadBookmarks();
   }, []);
 
@@ -114,20 +134,52 @@ export const BookmarkProvider = ({ children }) => {
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify(data),
       });
-      if (!res.ok) throw new Error('Failed to add bookmark');
+      
+      if (!res.ok) {
+        throw new Error(`HTTP error! Status: ${res.status}`);
+      }
+      
       const result = await res.json();
       dispatch({ type: 'ADD_BOOKMARK', payload: result.bookmark });
       toast.success('Bookmark added successfully');
     } catch (error) {
       console.error('Failed to add bookmark:', error);
-      toast.error('Failed to add bookmark');
+      toast.error(`Failed to add bookmark: ${error.message}`);
     }
   };
 
   const removeBookmark = async (id) => {
-    // Not implemented in backend yet, so just remove locally for now
-    dispatch({ type: 'REMOVE_BOOKMARK', payload: id });
-    toast.success('Bookmark removed');
+    try {
+      // Optimistic update
+      dispatch({ type: 'REMOVE_BOOKMARK', payload: id });
+      
+      const res = await fetch(`${API_URL}/${id}`, {
+        method: 'DELETE',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+      });
+      
+      if (!res.ok) {
+        throw new Error(`HTTP error! Status: ${res.status}`);
+      }
+      
+      toast.success('Bookmark removed');
+    } catch (error) {
+      console.error('Failed to remove bookmark:', error);
+      toast.error(`Failed to remove bookmark: ${error.message}`);
+      
+      // Revert optimistic update on error
+      try {
+        const res = await fetch(API_URL);
+        if (res.ok) {
+          const bookmarks = await res.json();
+          dispatch({ type: 'SET_BOOKMARKS', payload: bookmarks });
+        }
+      } catch (fetchError) {
+        console.error('Failed to revert bookmark removal:', fetchError);
+      }
+    }
   };
 
   const setCategory = (category) => {
@@ -162,6 +214,7 @@ const mockBookmarks = [
     lastVisited: '2025-05-06T15:45:00Z',
     source: 'extension',
   },
+  // rest of the mock bookmarks remain the same
   {
     id: '2',
     url: 'https://tailwindcss.com',
