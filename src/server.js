@@ -36,6 +36,21 @@ async function startServer() {
     res.status(200).json({ status: 'ok', timestamp: new Date().toISOString() });
   });
 
+  // Helper: categorize bookmark
+  function autoCategorize(bookmark) {
+    // Use folder/category if present
+    if (bookmark.category && bookmark.category !== 'other') return bookmark.category;
+    // Use domain-based simple rules
+    const url = bookmark.url || '';
+    if (url.includes('github.com') || url.includes('dev.to') || url.includes('stackoverflow.com')) return 'Development';
+    if (url.includes('youtube.com') || url.includes('netflix.com')) return 'Entertainment';
+    if (url.includes('medium.com') || url.includes('wikipedia.org')) return 'Research';
+    if (url.includes('linkedin.com')) return 'Work';
+    if (url.includes('dribbble.com') || url.includes('behance.net')) return 'Design';
+    // Default
+    return 'Other';
+  }
+
   app.post('/api/bookmarks', async (req, res) => {
     try {
       const bookmarkData = req.body;
@@ -59,6 +74,31 @@ async function startServer() {
     } catch (error) {
       console.error('Error processing bookmark:', error);
       res.status(500).json({ error: 'Failed to process bookmark' });
+    }
+  });
+
+  app.post('/api/bookmarks/import', async (req, res) => {
+    try {
+      const imported = [];
+      const bookmarksToImport = req.body.bookmarks || [];
+      for (const b of bookmarksToImport) {
+        if (!b.url || !b.title) continue;
+        const newBookmark = {
+          ...b,
+          id: uuidv4(),
+          createdAt: new Date().toISOString(),
+          lastVisited: new Date().toISOString(),
+          category: autoCategorize(b),
+          tags: b.tags || [],
+          source: 'import'
+        };
+        bookmarks.push(newBookmark);
+        imported.push(newBookmark);
+      }
+      res.status(200).json({ success: true, importedCount: imported.length, imported });
+    } catch (error) {
+      console.error('Error importing bookmarks:', error);
+      res.status(500).json({ error: 'Failed to import bookmarks' });
     }
   });
 

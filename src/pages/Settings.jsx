@@ -1,16 +1,10 @@
 import React from 'react';
-// import { BookmarkProvider } from '@/context/BookmarkContext';
-// import Header from '@/components/Header';
-// import ChromeIntegrationGuide from '@/components/ChromeIntegrationGuide';
-// import { Button } from '@/components/ui/button';
-// import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
-// import { 
-//   Card, 
-//   CardContent, 
-//   CardDescription, 
-//   CardHeader, 
-//   CardTitle 
-// } from '@/components/ui/card';
+import { BookmarkProvider } from '@/context/BookmarkContext';
+import Header from '@/components/Header';
+import ChromeIntegrationGuide from '@/components/ChromeIntegrationGuide';
+import { Button } from '@/components/ui/button';
+import { Tabs, TabsList, TabsTrigger, TabsContent } from '@/components/ui/tabs';
+import { Card, CardHeader, CardTitle, CardDescription, CardContent } from '@/components/ui/card';
 import { 
   Download, 
   Upload, 

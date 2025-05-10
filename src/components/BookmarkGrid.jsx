@@ -59,11 +59,24 @@ const EmptyState = ({ searchQuery, category }) => {
         <BookmarkIcon size={48} className="text-gray-400" /> {/* Changed to BookmarkIcon */}
       </div>
       <h3 className="text-lg font-medium mb-2">{message}</h3>
-      <p className="text-gray-500">
+      <p className="text-gray-500 mb-4">
         {searchQuery
           ? "Try a different search term or category"
-          : "Add some bookmarks to see them here"}
+          : "Add some bookmarks to see them here."}
       </p>
+      {/* First-time user import prompt */}
+      {!searchQuery && (
+        <div className="mt-4 p-4 bg-blue-50 border border-blue-200 rounded-md text-center">
+          <p className="mb-2 text-blue-700 font-medium">
+            First time here? Import all your existing Chrome bookmarks!
+          </p>
+          <p className="mb-2 text-blue-600 text-sm">
+            1. Click the Bookmark Hub extension icon in Chrome.<br />
+            2. Click <b>"Import All Bookmarks"</b> in the settings.<br />
+            3. Your bookmarks will be synced and categorized automatically.
+          </p>
+        </div>
+      )}
     </div>
   );
 };
