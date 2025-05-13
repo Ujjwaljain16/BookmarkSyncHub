@@ -29,6 +29,7 @@ import {
 import { Button } from '@/components/ui/button';
 import { Plus } from 'lucide-react';
 import { useBookmarkContext } from '@/context/BookmarkContext';
+import { toast } from 'sonner';
 
 const formSchema = z.object({
   url: z.string().url({ message: 'Please enter a valid URL' }),
@@ -53,19 +54,30 @@ const AddBookmarkForm = () => {
     },
   });
   
-  const onSubmit = (data) => {
-    const newBookmark = {
-      url: data.url,
-      title: data.title,
-      description: data.description || undefined,
-      category: data.category,
-      tags: data.tags.split(',').map(tag => tag.trim()).filter(Boolean),
-      source: 'manual',
-    };
-    
-    addBookmark(newBookmark);
-    form.reset();
-    setOpen(false);
+  const onSubmit = async (data) => {
+    try {
+      const newBookmark = {
+        url: data.url,
+        title: data.title,
+        description: data.description || undefined,
+        category: data.category,
+        tags: data.tags.split(',').map(tag => tag.trim()).filter(Boolean),
+        source: 'manual',
+      };
+      
+      const result = await addBookmark(newBookmark);
+      form.reset();
+      setOpen(false);
+      
+      // Check if this was an update or new bookmark
+      if (result.updatedAt && result.createdAt !== result.updatedAt) {
+        toast.success('Bookmark updated successfully');
+      } else {
+        toast.success('Bookmark added successfully');
+      }
+    } catch (error) {
+      toast.error('Failed to save bookmark');
+    }
   };
   
   return (

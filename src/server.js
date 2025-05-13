@@ -1,4 +1,27 @@
-import express from 'express';
+// GET bookmark by URL
+app.get('/api/bookmarks/url', async (req, res) => {
+  try {
+    const { url } = req.query;
+    
+    if (!url) {
+      return res.status(400).json({ error: 'URL parameter is required' });
+    }
+    
+    const normalizedQueryUrl = normalizeUrl(url);
+    const bookmarks = await readBookmarks();
+    
+    const bookmark = bookmarks.find(b => normalizeUrl(b.url) === normalizedQueryUrl);
+    
+    if (!bookmark) {
+      return res.status(404).json({ error: 'Bookmark not found' });
+    }
+    
+    res.json(bookmark);
+  } catch (error) {
+    console.error('Error finding bookmark by URL:', error);
+    res.status(500).json({ error: 'Failed to find bookmark' });
+  }
+});import express from 'express';
 import cors from 'cors';
 import { v4 as uuidv4 } from 'uuid';
 import { promises as fs } from 'fs';
@@ -14,7 +37,7 @@ const __dirname = dirname(fileURLToPath(import.meta.url));
 const DATA_FILE = join(__dirname, 'bookmarks.json');
 
 const app = express();
-const port = process.env.PORT || 3000;
+const port = (typeof process !== 'undefined' && process.env.PORT) || 3000;
 
 // Initialize natural language processing tools
 const tokenizer = new natural.WordTokenizer();
@@ -47,6 +70,18 @@ async function readBookmarks() {
 // Helper function to write bookmarks to file
 async function writeBookmarks(bookmarks) {
   await fs.writeFile(DATA_FILE, JSON.stringify(bookmarks, null, 2), 'utf8');
+}
+
+// Helper function to normalize URL
+function normalizeUrl(url) {
+  try {
+    const urlObj = new URL(url);
+    // Remove trailing slashes, normalize protocol, and convert to lowercase
+    return urlObj.toString().replace(/\/$/, '').toLowerCase();
+  } catch (e) {
+    console.error('Error normalizing URL:', url, e);
+    return url.toLowerCase();
+  }
 }
 
 // AI-powered bookmark analysis
@@ -179,22 +214,55 @@ app.get('/api/bookmarks', async (req, res) => {
 app.post('/api/bookmarks', async (req, res) => {
   try {
     const bookmarks = await readBookmarks();
-    const bookmark = {
-      id: uuidv4(),
-      ...req.body,
-      createdAt: new Date().toISOString(),
-      lastVisited: new Date().toISOString()
-    };
-    bookmarks.push(bookmark);
-    await writeBookmarks(bookmarks);
-    res.status(201).json({ bookmark });
+    
+    // Check for duplicates by URL
+    const normalizedUrl = normalizeUrl(req.body.url);
+    const existingBookmarkIndex = bookmarks.findIndex(
+      b => normalizeUrl(b.url) === normalizedUrl
+    );
+    
+    if (existingBookmarkIndex !== -1) {
+      // Update existing bookmark
+      const updatedBookmark = {
+        ...bookmarks[existingBookmarkIndex],
+        ...req.body,
+        url: req.body.url, // Keep original URL capitalization
+        lastVisited: new Date().toISOString(),
+        visitCount: (bookmarks[existingBookmarkIndex].visitCount || 0) + 1
+      };
+      
+      bookmarks[existingBookmarkIndex] = updatedBookmark;
+      await writeBookmarks(bookmarks);
+      
+      res.status(200).json({ 
+        bookmark: updatedBookmark,
+        wasDuplicate: true 
+      });
+    } else {
+      // Add new bookmark
+      const bookmark = {
+        id: uuidv4(),
+        ...req.body,
+        createdAt: new Date().toISOString(),
+        lastVisited: new Date().toISOString(),
+        visitCount: 1
+      };
+      
+      bookmarks.push(bookmark);
+      await writeBookmarks(bookmarks);
+      
+      res.status(201).json({ 
+        bookmark,
+        wasDuplicate: false 
+      });
+    }
   } catch (error) {
     console.error('Error adding bookmark:', error);
     res.status(500).json({ error: 'Failed to add bookmark' });
   }
 });
 
-// DELETE bookmark
+// DELETE bookmark by ID
 app.delete('/api/bookmarks/:id', async (req, res) => {
   try {
     const { id } = req.params;
@@ -214,20 +282,82 @@ app.delete('/api/bookmarks/:id', async (req, res) => {
   }
 });
 
+// DELETE bookmark by URL (additional endpoint)
+app.delete('/api/bookmarks/url/:encodedUrl', async (req, res) => {
+  try {
+    const encodedUrl = req.params.encodedUrl;
+    const url = decodeURIComponent(encodedUrl);
+    const normalizedUrl = normalizeUrl(url);
+    
+    const bookmarks = await readBookmarks();
+    const initialLength = bookmarks.length;
+    
+    const filteredBookmarks = bookmarks.filter(
+      bookmark => normalizeUrl(bookmark.url) !== normalizedUrl
+    );
+    
+    if (filteredBookmarks.length === initialLength) {
+      return res.status(404).json({ error: 'Bookmark not found' });
+    }
+    
+    await writeBookmarks(filteredBookmarks);
+    res.status(200).json({ message: 'Bookmark deleted successfully' });
+  } catch (error) {
+    console.error('Error deleting bookmark by URL:', error);
+    res.status(500).json({ error: 'Failed to delete bookmark' });
+  }
+});
+
 // Bulk import bookmarks
 app.post('/api/bookmarks/import', async (req, res) => {
   try {
-    const bookmarks = await readBookmarks();
-    const importedBookmarks = req.body.map(bookmark => ({
-      id: uuidv4(),
-      ...bookmark,
-      createdAt: new Date().toISOString(),
-      lastVisited: new Date().toISOString()
-    }));
+    const existingBookmarks = await readBookmarks();
+    const importedBookmarks = [];
+    const updatedBookmarks = [];
     
-    const updatedBookmarks = [...bookmarks, ...importedBookmarks];
-    await writeBookmarks(updatedBookmarks);
-    res.status(201).json({ bookmarks: importedBookmarks });
+    // Process each bookmark in the request
+    for (const bookmarkData of req.body) {
+      const normalizedUrl = normalizeUrl(bookmarkData.url);
+      
+      // Check for duplicates
+      const existingIndex = existingBookmarks.findIndex(
+        b => normalizeUrl(b.url) === normalizedUrl
+      );
+      
+      if (existingIndex !== -1) {
+        // Update existing bookmark
+        const updatedBookmark = {
+          ...existingBookmarks[existingIndex],
+          ...bookmarkData,
+          lastVisited: new Date().toISOString(),
+          visitCount: (existingBookmarks[existingIndex].visitCount || 0) + 1
+        };
+        
+        existingBookmarks[existingIndex] = updatedBookmark;
+        updatedBookmarks.push(updatedBookmark);
+      } else {
+        // Create new bookmark
+        const newBookmark = {
+          id: uuidv4(),
+          ...bookmarkData,
+          createdAt: new Date().toISOString(),
+          lastVisited: new Date().toISOString(),
+          visitCount: 1
+        };
+        
+        existingBookmarks.push(newBookmark);
+        importedBookmarks.push(newBookmark);
+      }
+    }
+    
+    // Save the updated bookmarks
+    await writeBookmarks(existingBookmarks);
+    
+    res.status(201).json({ 
+      added: importedBookmarks,
+      updated: updatedBookmarks,
+      total: existingBookmarks.length
+    });
   } catch (error) {
     console.error('Error importing bookmarks:', error);
     res.status(500).json({ error: 'Failed to import bookmarks' });

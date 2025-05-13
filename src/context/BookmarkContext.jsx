@@ -3,7 +3,6 @@ import { toast } from 'sonner';
 
 const API_URL = 'http://localhost:3000/api/bookmarks';
 
-// Initial state
 const initialState = {
   bookmarks: [],
   filteredBookmarks: [],
@@ -101,7 +100,6 @@ export const BookmarkProvider = ({ children }) => {
           headers: {
             'Content-Type': 'application/json',
           },
-          // No credentials needed unless you're using authentication
         });
         
         if (!res.ok) {
@@ -113,8 +111,9 @@ export const BookmarkProvider = ({ children }) => {
       } catch (error) {
         console.error('Failed to load bookmarks:', error);
         toast.error(`Failed to load bookmarks: ${error.message}`);
-        
-        // If API is unavailable, load mock data
+
+        //mock data 
+      
         if (error.message.includes('Failed to fetch')) {
           console.log('Loading mock bookmarks instead');
           dispatch({ type: 'SET_BOOKMARKS', payload: mockBookmarks });
@@ -129,6 +128,25 @@ export const BookmarkProvider = ({ children }) => {
 
   const addBookmark = async (data) => {
     try {
+      // First check for duplicates
+      const checkDuplicateRes = await fetch(`${API_URL}/check-duplicate`, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ url: data.url }),
+      });
+
+      if (!checkDuplicateRes.ok) {
+        throw new Error(`Failed to check for duplicates: ${checkDuplicateRes.status}`);
+      }
+
+      const { isDuplicate, existingBookmark } = await checkDuplicateRes.json();
+
+      if (isDuplicate) {
+        toast.error('This bookmark already exists in your collection');
+        return existingBookmark;
+      }
+
+      // If not a duplicate, proceed with adding the bookmark
       const res = await fetch(API_URL, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
@@ -142,9 +160,11 @@ export const BookmarkProvider = ({ children }) => {
       const result = await res.json();
       dispatch({ type: 'ADD_BOOKMARK', payload: result.bookmark });
       toast.success('Bookmark added successfully');
+      return result.bookmark;
     } catch (error) {
       console.error('Failed to add bookmark:', error);
       toast.error(`Failed to add bookmark: ${error.message}`);
+      throw error;
     }
   };
 

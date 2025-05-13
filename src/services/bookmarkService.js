@@ -12,13 +12,37 @@ export const fetchBookmarks = async () => {
 export const addBookmark = async (bookmark) => {
   await delay(500);
 
+  const existingBookmarks = await fetchBookmarks();
+  
+  // Check for duplicate URL
+  const existingBookmark = existingBookmarks.find(existing => existing.url === bookmark.url);
+  
+  if (existingBookmark) {
+    // Update the existing bookmark instead of creating a new one
+    const updatedBookmark = {
+      ...existingBookmark,
+      ...bookmark,
+      id: existingBookmark.id, // Keep the original ID
+      createdAt: existingBookmark.createdAt, // Keep the original creation date
+      updatedAt: new Date().toISOString(), // Add update timestamp
+    };
+
+    const updatedBookmarks = existingBookmarks.map(b => 
+      b.id === existingBookmark.id ? updatedBookmark : b
+    );
+    
+    localStorage.setItem('bookmarks', JSON.stringify(updatedBookmarks));
+    return updatedBookmark;
+  }
+
+  // If no existing bookmark found, create a new one
   const newBookmark = {
     ...bookmark,
     id: crypto.randomUUID(),
     createdAt: new Date().toISOString(),
+    updatedAt: new Date().toISOString(),
   };
 
-  const existingBookmarks = await fetchBookmarks();
   const updatedBookmarks = [...existingBookmarks, newBookmark];
   localStorage.setItem('bookmarks', JSON.stringify(updatedBookmarks));
 
