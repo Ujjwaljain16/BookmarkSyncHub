@@ -262,6 +262,17 @@ app.post('/api/bookmarks', async (req, res) => {
   }
 });
 
+// DELETE all bookmarks
+app.delete('/api/bookmarks/all', async (req, res) => {
+  try {
+    await writeBookmarks([]);
+    res.status(200).json({ message: 'All bookmarks deleted successfully' });
+  } catch (error) {
+    console.error('Error deleting all bookmarks:', error);
+    res.status(500).json({ error: 'Failed to delete all bookmarks' });
+  }
+});
+
 // DELETE bookmark by ID
 app.delete('/api/bookmarks/:id', async (req, res) => {
   try {
@@ -314,9 +325,17 @@ app.post('/api/bookmarks/import', async (req, res) => {
     const existingBookmarks = await readBookmarks();
     const importedBookmarks = [];
     const updatedBookmarks = [];
+    const skippedBookmarks = [];
     
     // Process each bookmark in the request
     for (const bookmarkData of req.body) {
+      if (!bookmarkData.url) {
+        skippedBookmarks.push({
+          ...bookmarkData,
+          reason: 'Missing URL'
+        });
+        continue;
+      }
       const normalizedUrl = normalizeUrl(bookmarkData.url);
       
       // Check for duplicates
@@ -326,11 +345,41 @@ app.post('/api/bookmarks/import', async (req, res) => {
       
       if (existingIndex !== -1) {
         // Update existing bookmark
+        const existingTimestamp = new Date(existingBookmarks[existingIndex].lastModified || 
+          existingBookmarks[existingIndex].lastVisited || 
+          existingBookmarks[existingIndex].createdAt).getTime();
+
+        const importTimestamp = new Date(bookmarkData.lastModified || 
+          bookmarkData.lastVisited || 
+          new Date().toISOString()).getTime();
+        if (existingTimestamp >= importTimestamp && 
+          existingBookmarks[existingIndex].tags?.length && 
+          existingBookmarks[existingIndex].description) {
+          skippedBookmarks.push({
+            url: bookmarkData.url,
+            title: bookmarkData.title,
+            reason: 'Existing bookmark has newer data'
+          });
+          continue;
+        }
+
         const updatedBookmark = {
           ...existingBookmarks[existingIndex],
-          ...bookmarkData,
+          title: bookmarkData.title || existingBookmarks[existingIndex].title,
+          description: bookmarkData.description || existingBookmarks[existingIndex].description,
           lastVisited: new Date().toISOString(),
-          visitCount: (existingBookmarks[existingIndex].visitCount || 0) + 1
+          lastModified: new Date().toISOString(),
+          visitCount: (existingBookmarks[existingIndex].visitCount || 0) + 1,
+          // Merge tags without duplicates
+          tags: Array.from(new Set([
+            ...(existingBookmarks[existingIndex].tags || []),
+            ...(bookmarkData.tags || [])
+          ])),
+          // Keep existing category if it's more specific than 'other'
+          category: existingBookmarks[existingIndex].category !== 'other' ? 
+            existingBookmarks[existingIndex].category : (bookmarkData.category || 'other'),
+          // Use whichever favicon is not null, preferring the new one
+          favicon: bookmarkData.favicon || existingBookmarks[existingIndex].favicon
         };
         
         existingBookmarks[existingIndex] = updatedBookmark;
@@ -342,7 +391,10 @@ app.post('/api/bookmarks/import', async (req, res) => {
           ...bookmarkData,
           createdAt: new Date().toISOString(),
           lastVisited: new Date().toISOString(),
-          visitCount: 1
+          lastModified: new Date().toISOString(),
+          visitCount: 1,
+          tags: bookmarkData.tags || [],
+          category: bookmarkData.category || 'other'
         };
         
         existingBookmarks.push(newBookmark);
@@ -354,9 +406,15 @@ app.post('/api/bookmarks/import', async (req, res) => {
     await writeBookmarks(existingBookmarks);
     
     res.status(201).json({ 
-      added: importedBookmarks,
-      updated: updatedBookmarks,
-      total: existingBookmarks.length
+      added: importedBookmarks.length,
+      updated: updatedBookmarks.length,
+      skipped: skippedBookmarks.length,
+      total: existingBookmarks.length,
+      details: {
+        added: importedBookmarks,
+        updated: updatedBookmarks,
+        skipped: skippedBookmarks
+      }
     });
   } catch (error) {
     console.error('Error importing bookmarks:', error);
