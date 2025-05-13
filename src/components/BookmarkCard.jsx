@@ -10,6 +10,7 @@ import PropTypes from 'prop-types';
 const BookmarkCard = ({ bookmark }) => {
   const { removeBookmark } = useBookmarkContext();
   const [isHovering, setIsHovering] = useState(false);
+  const [faviconError, setFaviconError] = useState(false);
   
   const formattedDate = bookmark.createdAt ? 
     formatDistanceToNow(new Date(bookmark.createdAt), { addSuffix: true }) : 
@@ -40,9 +41,21 @@ const BookmarkCard = ({ bookmark }) => {
             className="h-40 w-full bg-cover bg-center"
             style={{ backgroundImage: `url(${bookmark.thumbnail})` }}
           />
+        ) : bookmark.favicon && !faviconError ? (
+          <div className="h-40 w-full bg-white flex items-center justify-center overflow-hidden">
+            <img
+              src={bookmark.favicon}
+              alt="Site icon"
+              className="w-20 h-20 object-contain"
+              onError={e => {
+                setFaviconError(true);
+                e.target.style.display = 'none';
+              }}
+            />
+          </div>
         ) : (
-          <div className="h-40 w-full bg-gradient-to-r from-bookmark-primary to-bookmark-secondary flex items-center justify-center">
-            <span className="text-white font-bold text-xl">
+          <div className="h-40 w-full bg-gray-100 flex items-center justify-center">
+            <span className="text-gray-400 font-bold text-5xl select-none">
               {bookmark.title ? bookmark.title.substring(0, 1).toUpperCase() : '?'}
             </span>
           </div>
@@ -64,14 +77,12 @@ const BookmarkCard = ({ bookmark }) => {
       
       <CardContent className="pt-4">
         <div className="flex items-center gap-2 mb-2">
-          {bookmark.favicon && (
+          {bookmark.favicon && !faviconError && (
             <img 
               src={bookmark.favicon} 
               alt="Site icon" 
               className="w-4 h-4 rounded-sm"
-              onError={(e) => {
-                e.target.style.display = 'none';
-              }} 
+              onError={() => setFaviconError(true)}
             />
           )}
           <h3 className="font-medium line-clamp-2">{bookmark.title || 'Untitled Bookmark'}</h3>

@@ -63,7 +63,7 @@ const enrichBookmarkMetadata = async (bookmark) => {
   return {
     ...bookmark,
     description: bookmark.description || `Description for ${bookmark.title}`,
-    favicon: bookmark.favicon || `https://www.google.com/s2/favicons?domain=${bookmark.url}`,
+    favicon: bookmark.favicon || `https://www.google.com/s2/favicons?sz=64&domain=${bookmark.url}`,
     thumbnail: `https://image.thum.io/get/width/500/crop/600/noanimate/${bookmark.url}`,
     category: bookmark.category || 'other',
     tags: bookmark.tags || [],
