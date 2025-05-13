@@ -67,7 +67,6 @@ const Settings = () => {
               <TabsList className="w-full">
                 <TabsTrigger value="integration">Chrome Integration</TabsTrigger>
                 <TabsTrigger value="data">Data Management</TabsTrigger>
-                <TabsTrigger value="account">Account</TabsTrigger>
               </TabsList>
               
               <TabsContent value="integration" className="pt-6">
@@ -119,22 +118,6 @@ const Settings = () => {
                         </Button>
                       </div>
                     </div>
-                  </CardContent>
-                </Card>
-              </TabsContent>
-              
-              <TabsContent value="account" className="pt-6">
-                <Card>
-                  <CardHeader>
-                    <CardTitle>Account Settings</CardTitle>
-                    <CardDescription>
-                      Manage your account and preferences
-                    </CardDescription>
-                  </CardHeader>
-                  <CardContent>
-                    <p className="text-sm text-gray-600 mb-4">
-                      Account features will be implemented in future updates.
-                    </p>
                   </CardContent>
                 </Card>
               </TabsContent>

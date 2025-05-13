@@ -5,7 +5,6 @@ import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { BrowserRouter, Routes, Route } from "react-router-dom";
 import Index from "./pages/index";
 import Settings from "./pages/Settings";
-import ApiDemo from "./pages/ApiDemo";
 import NotFound from "./pages/NotFound";
 
 // Create a client
@@ -27,7 +26,6 @@ const App = () => (
         <Routes>
           <Route path="/" element={<Index />} />
           <Route path="/settings" element={<Settings />} />
-          <Route path="/api-demo" element={<ApiDemo />} />
           <Route path="*" element={<NotFound />} />
         </Routes>
       </BrowserRouter>
