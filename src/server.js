@@ -1,27 +1,4 @@
-// GET bookmark by URL
-app.get('/api/bookmarks/url', async (req, res) => {
-  try {
-    const { url } = req.query;
-    
-    if (!url) {
-      return res.status(400).json({ error: 'URL parameter is required' });
-    }
-    
-    const normalizedQueryUrl = normalizeUrl(url);
-    const bookmarks = await readBookmarks();
-    
-    const bookmark = bookmarks.find(b => normalizeUrl(b.url) === normalizedQueryUrl);
-    
-    if (!bookmark) {
-      return res.status(404).json({ error: 'Bookmark not found' });
-    }
-    
-    res.json(bookmark);
-  } catch (error) {
-    console.error('Error finding bookmark by URL:', error);
-    res.status(500).json({ error: 'Failed to find bookmark' });
-  }
-});import express from 'express';
+import express from 'express';
 import cors from 'cors';
 import { v4 as uuidv4 } from 'uuid';
 import { promises as fs } from 'fs';
@@ -210,6 +187,29 @@ app.get('/api/bookmarks', async (req, res) => {
   }
 });
 
+// GET bookmark by URL
+app.get('/api/bookmarks/url', async (req, res) => {
+  try {
+    const { url } = req.query;
+    if (!url) {
+      return res.status(400).json({ error: 'URL parameter is required' });
+    }
+
+    const bookmarks = await readBookmarks();
+    const normalizedUrl = normalizeUrl(url);
+    const bookmark = bookmarks.find(b => normalizeUrl(b.url) === normalizedUrl);
+
+    if (!bookmark) {
+      return res.status(404).json({ error: 'Bookmark not found' });
+    }
+
+    res.json(bookmark);
+  } catch (error) {
+    console.error('Error finding bookmark:', error);
+    res.status(500).json({ error: 'Failed to find bookmark' });
+  }
+});
+
 // POST new bookmark
 app.post('/api/bookmarks', async (req, res) => {
   try {
@@ -370,6 +370,7 @@ app.use((err, req, res, next) => {
   res.status(500).json({ error: 'Something broke!' });
 });
 
+// Start the server
 app.listen(port, () => {
-  console.log(`Server running at http://localhost:${port}`);
+  console.log(`Server is running on port ${port}`);
 });

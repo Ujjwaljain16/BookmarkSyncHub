@@ -1,14 +1,1271 @@
 [
   {
-    "id": "a2a3ef33-1e59-4ff1-9c79-e11c22bf9e1f",
-    "url": "https://docs.google.com/spreadsheets/d/1KmoNUNnZmtKRJxUKfyEN4LZ0-Gu0W7tP5BCaOfmMIVw/edit?gid=77917834#gid=77917834",
-    "title": "SST 2028 Batch Term 4 syllabus [SHAREABLE] - Google Sheets",
-    "description": "",
-    "favicon": "https://www.google.com/s2/favicons?domain=docs.google.com",
-    "category": "other bookmarks",
-    "tags": [],
-    "source": "chrome",
-    "createdAt": "2025-05-13T09:05:21.235Z",
-    "lastVisited": "2025-05-13T09:05:21.235Z"
+    "id": "7268dfd5-0636-432a-9e0f-9338c1da165c",
+    "url": "https://github.com/mrinal1224/Scaler-Frontend-questions-Beginner-Module/commit/bc4d22bfef97b01a63236a558eca20b03688c9fc#diff-be5f3f363f35c02f19bc6cc7c4fcf8b999ee0c7ab24fea236bd1614ec8cb1b70R7",
+    "title": "Added questions from class-1 to class-5 · mrinal1224/Scaler-Frontend-questions-Beginner-Module@bc4d22b",
+    "category": "Other bookmarks",
+    "createdAt": "2025-05-13T09:24:10.852Z",
+    "lastVisited": "2025-05-13T09:24:51.645Z",
+    "visitCount": 3
+  },
+  {
+    "id": "f29bfa29-92a1-4c58-9574-41c6e9dfdb92",
+    "url": "https://github.com/KKshitiz/whatsapp-ui-clone/blob/master/icons/status.svg",
+    "title": "whatsapp-ui-clone/icons/status.svg at master · KKshitiz/whatsapp-ui-clone",
+    "category": "Other bookmarks",
+    "createdAt": "2025-05-13T09:24:10.853Z",
+    "lastVisited": "2025-05-13T09:24:51.645Z",
+    "visitCount": 3
+  },
+  {
+    "id": "853a0273-e97b-4ff7-b8bb-642feafa4bea",
+    "url": "https://github.com/KKshitiz/whatsapp-ui-clone/tree/master/styles",
+    "title": "whatsapp-ui-clone/styles at master · KKshitiz/whatsapp-ui-clone",
+    "category": "Other bookmarks",
+    "createdAt": "2025-05-13T09:24:10.853Z",
+    "lastVisited": "2025-05-13T09:24:51.645Z",
+    "visitCount": 3
+  },
+  {
+    "id": "a38c7be5-256f-42b2-a1c9-ccf8d09d4c45",
+    "url": "https://github.com/AbdelrahmanAlsayed/competitive-programming",
+    "title": "AbdelrahmanAlsayed/competitive-programming: A collection of C++ solutions to various problems from Codeforces. This repository includes diverse problem-solving techniques and code examples for competitive programming challenges.",
+    "category": "Other bookmarks",
+    "createdAt": "2025-05-13T09:24:10.853Z",
+    "lastVisited": "2025-05-13T09:24:51.645Z",
+    "visitCount": 3
+  },
+  {
+    "id": "244cee59-6c12-4188-90ea-daba0a10481f",
+    "url": "https://80000hours.org/problem-profiles/moral-status-digital-minds/?source=email&uni_id=0&utm_source=80%2C000+Hours+mailing+list&utm_campaign=36d7231513-EMAIL_CAMPAIGN_2024_09_26_11_51&utm_medium=email&utm_term=0_43bc1ae55c-a80a1a10fb-%5BLIST_EMAIL_ID%5D",
+    "title": "Understanding the moral status of digital minds - 80,000 Hours",
+    "category": "Other bookmarks",
+    "createdAt": "2025-05-13T09:24:10.853Z",
+    "lastVisited": "2025-05-13T09:24:51.645Z",
+    "visitCount": 3
+  },
+  {
+    "id": "9667c719-7373-440c-a3de-7b1e0b66807b",
+    "url": "https://leetcode.com/discuss/study-guide/1233854/a-noobs-guide-to-the-binary-search-algorithm",
+    "title": "✅ A GUIDE TO THE BINARY SEARCH ALGORITHM!!! - LeetCode Discuss",
+    "category": "New folder",
+    "createdAt": "2025-05-13T09:24:10.853Z",
+    "lastVisited": "2025-05-13T09:24:51.645Z",
+    "visitCount": 3
+  },
+  {
+    "id": "2fabbed6-1ed2-4543-865a-2e0a9eec796a",
+    "url": "https://leetcode.com/discuss/interview-question/1322500/5-variations-of-Binary-search-(A-Self-Note)",
+    "title": "5 variations of Binary search (A Self Note) - LeetCode Discuss",
+    "category": "New folder",
+    "createdAt": "2025-05-13T09:24:10.853Z",
+    "lastVisited": "2025-05-13T09:24:51.645Z",
+    "visitCount": 3
+  },
+  {
+    "id": "c0861dca-fde7-402c-afd8-ef6b8e62761b",
+    "url": "https://javascript.info/",
+    "title": "The Modern JavaScript Tutorial",
+    "category": "JavaScript",
+    "createdAt": "2025-05-13T09:24:10.853Z",
+    "lastVisited": "2025-05-13T09:24:51.645Z",
+    "visitCount": 3
+  },
+  {
+    "id": "4b3bc539-acdd-4d0d-85ad-35cdf851d7f7",
+    "url": "https://eloquentjavascript.net/",
+    "title": "Eloquent JavaScript",
+    "category": "JavaScript",
+    "createdAt": "2025-05-13T09:24:10.853Z",
+    "lastVisited": "2025-05-13T09:24:51.645Z",
+    "visitCount": 3
+  },
+  {
+    "id": "4a6cdd2a-aee8-419d-8493-6a7296f3fbe4",
+    "url": "https://masterjs.vercel.app/",
+    "title": "Home | masterJS",
+    "category": "JavaScript",
+    "createdAt": "2025-05-13T09:24:10.853Z",
+    "lastVisited": "2025-05-13T09:24:51.645Z",
+    "visitCount": 3
+  },
+  {
+    "id": "71418c97-2ca1-4c72-931f-3bc8cf90690c",
+    "url": "https://flaviocopes.com/javascript/",
+    "title": "Roadmap to Learn JavaScript",
+    "category": "JavaScript",
+    "createdAt": "2025-05-13T09:24:10.853Z",
+    "lastVisited": "2025-05-13T09:24:51.645Z",
+    "visitCount": 3
+  },
+  {
+    "id": "805272c5-7e47-49b1-be07-6b412e015986",
+    "url": "https://medium.com/codex/learning-javascript-road-map-1d97d20aef5d",
+    "title": "Learning JavaScript Road-Map. Prerequisites | by Vlad Ungureanu | CodeX | Medium",
+    "category": "JavaScript",
+    "createdAt": "2025-05-13T09:24:10.853Z",
+    "lastVisited": "2025-05-13T09:24:51.646Z",
+    "visitCount": 3
+  },
+  {
+    "id": "78128c81-a987-45ea-8336-b9d0706a02c6",
+    "url": "https://www.codechef.com/users/tushar1651",
+    "title": "tushar1651 | CodeChef User Profile for Tushar Khurana | CodeChef",
+    "category": "JavaScript",
+    "createdAt": "2025-05-13T09:24:10.853Z",
+    "lastVisited": "2025-05-13T09:24:51.646Z",
+    "visitCount": 3
+  },
+  {
+    "id": "eb4c5cb5-ebeb-479d-ba20-ff9ea39169de",
+    "url": "https://tc39.es/ecma262/2023/multipage/",
+    "title": "ECMAScript® 2023 Language Specification",
+    "category": "JavaScript",
+    "createdAt": "2025-05-13T09:24:10.853Z",
+    "lastVisited": "2025-05-13T09:24:51.646Z",
+    "visitCount": 3
+  },
+  {
+    "id": "e1ee938e-e606-4127-8723-06d6b4f6ebf5",
+    "url": "https://github.com/mrinal1224/SST-dev-2-Assignments",
+    "title": "mrinal1224/SST-dev-2-Assignments",
+    "category": "JavaScript",
+    "createdAt": "2025-05-13T09:24:10.853Z",
+    "lastVisited": "2025-05-13T09:24:51.646Z",
+    "visitCount": 3
+  },
+  {
+    "id": "2dd48236-2fd5-4674-bcf0-1f48fa783754",
+    "url": "https://github.com/mrinal1224/Approaches_and_Solutions/tree/main/js",
+    "title": "Approaches_and_Solutions/js at main · mrinal1224/Approaches_and_Solutions",
+    "category": "JavaScript",
+    "createdAt": "2025-05-13T09:24:10.853Z",
+    "lastVisited": "2025-05-13T09:24:51.646Z",
+    "visitCount": 3
+  },
+  {
+    "id": "7c31e2f7-d69e-43f2-a1c9-ec74d20e02b6",
+    "url": "https://github.com/mrinal1224/Scaler-Frontend-questions-Beginner-Module",
+    "title": "mrinal1224/Scaler-Frontend-questions-Beginner-Module",
+    "category": "JavaScript",
+    "createdAt": "2025-05-13T09:24:10.853Z",
+    "lastVisited": "2025-05-13T09:24:51.646Z",
+    "visitCount": 3
+  },
+  {
+    "id": "7a110ae8-72f7-4a8c-bca5-43d083061a08",
+    "url": "https://github.com/mrinal1224/JS-Beginner-Notes/tree/main/notes",
+    "title": "JS-Beginner-Notes/notes at main · mrinal1224/JS-Beginner-Notes",
+    "category": "JavaScript",
+    "createdAt": "2025-05-13T09:24:10.853Z",
+    "lastVisited": "2025-05-13T09:24:51.646Z",
+    "visitCount": 3
+  },
+  {
+    "id": "d648ab78-8faf-4558-8528-dce9a87e2da7",
+    "url": "https://github.com/mrinal1224/Discord-JS-Challenges",
+    "title": "mrinal1224/Discord-JS-Challenges",
+    "category": "JavaScript",
+    "createdAt": "2025-05-13T09:24:10.853Z",
+    "lastVisited": "2025-05-13T09:24:51.646Z",
+    "visitCount": 3
+  },
+  {
+    "id": "440c057a-cfbb-4bbc-bf43-7d4812f0ad11",
+    "url": "https://calebjay.com/links-list.html#javascript",
+    "title": "Useful Links",
+    "category": "JavaScript",
+    "createdAt": "2025-05-13T09:24:10.853Z",
+    "lastVisited": "2025-05-13T09:24:51.646Z",
+    "visitCount": 3
+  },
+  {
+    "id": "6bf6e7d7-4d24-4b10-8473-26b0c81b6f4a",
+    "url": "https://github.com/mrinal1224/Batch-3/blob/main/notes/functionalProgramming.md",
+    "title": "Batch-3/notes/functionalProgramming.md at main · mrinal1224/Batch-3",
+    "category": "JavaScript",
+    "createdAt": "2025-05-13T09:24:10.853Z",
+    "lastVisited": "2025-05-13T09:24:51.646Z",
+    "visitCount": 3
+  },
+  {
+    "id": "963942ad-bf0c-4196-bc66-14b82b8bac51",
+    "url": "https://exercism.org/tracks/go",
+    "title": "GO",
+    "category": "JavaScript",
+    "createdAt": "2025-05-13T09:24:10.853Z",
+    "lastVisited": "2025-05-13T09:24:51.646Z",
+    "visitCount": 3
+  },
+  {
+    "id": "6b9b370c-8a57-4f31-90b4-874335b53e18",
+    "url": "https://github.com/surujtv/LearnJavaScript",
+    "title": "surujtv/LearnJavaScript: Core and advance concept of Synchronous and Asynchronous JavaScript with example codes and snippets",
+    "category": "JavaScript",
+    "createdAt": "2025-05-13T09:24:10.853Z",
+    "lastVisited": "2025-05-13T09:24:51.646Z",
+    "visitCount": 3
+  },
+  {
+    "id": "1d6349fe-4cde-4f10-851a-17dfa445e098",
+    "url": "https://github.com/Shweta2024/JavaScript-Projects/tree/master/Projects%20starting%20with%20S/Sorting-Visualizer-js",
+    "title": "JavaScript-Projects/Projects starting with S/Sorting-Visualizer-js at master · Shweta2024/JavaScript-Projects",
+    "category": "JavaScript",
+    "createdAt": "2025-05-13T09:24:10.853Z",
+    "lastVisited": "2025-05-13T09:24:51.646Z",
+    "visitCount": 3
+  },
+  {
+    "id": "707109b4-8083-48ff-b1bb-e4a41cc4db24",
+    "url": "https://bigfrontend.dev/problem?sort=mostLiked",
+    "title": "Front-End Interview Coding Problems | BFE.dev - prepare for Front-End job interviews.",
+    "category": "JavaScript",
+    "createdAt": "2025-05-13T09:24:10.854Z",
+    "lastVisited": "2025-05-13T09:24:51.646Z",
+    "visitCount": 3
+  },
+  {
+    "id": "4592f0a8-7fcd-4d95-a02f-c6f105b6ddaa",
+    "url": "https://www.appsmith.com/?utm-medium=display&utm-source=roadmap&utm-campaign=insight-media",
+    "title": "Appsmith | Open-Source Low-Code Application Platform",
+    "category": "JavaScript",
+    "createdAt": "2025-05-13T09:24:10.854Z",
+    "lastVisited": "2025-05-13T09:24:51.646Z",
+    "visitCount": 3
+  },
+  {
+    "id": "b85d9fdb-f9f3-4365-8122-6b822cec3dc0",
+    "url": "https://wesbos.com/javascript/03-the-tricky-bits/scope",
+    "title": "Scope - Beginner JavaScript - Wes Bos",
+    "category": "JavaScript",
+    "createdAt": "2025-05-13T09:24:10.854Z",
+    "lastVisited": "2025-05-13T09:24:51.646Z",
+    "visitCount": 3
+  },
+  {
+    "id": "13d6ca86-8bc7-42f4-b6bc-0d0402978dba",
+    "url": "https://github.com/Narahari-Sundaragopalan/JavaScript-Interview-Questions/blob/master/concepts/Promises.md",
+    "title": "JavaScript-Interview-Questions/concepts/Promises.md at master · Narahari-Sundaragopalan/JavaScript-Interview-Questions",
+    "category": "JavaScript",
+    "createdAt": "2025-05-13T09:24:10.854Z",
+    "lastVisited": "2025-05-13T09:24:51.646Z",
+    "visitCount": 3
+  },
+  {
+    "id": "338a84dd-d5f6-4a52-807d-66fb5c70ef17",
+    "url": "https://github.com/mrinal1224/Js-Revision-Class-Questions/tree/main/JS%20questions",
+    "title": "Js-Revision-Class-Questions/JS questions at main · mrinal1224/Js-Revision-Class-Questions",
+    "category": "JavaScript",
+    "createdAt": "2025-05-13T09:24:10.855Z",
+    "lastVisited": "2025-05-13T09:24:51.646Z",
+    "visitCount": 3
+  },
+  {
+    "id": "d559ffb7-4e3c-4bfa-b141-91859cb6eab2",
+    "url": "https://andreasbm.github.io/web-skills/",
+    "title": "Web Skills",
+    "category": "JavaScript",
+    "createdAt": "2025-05-13T09:24:10.855Z",
+    "lastVisited": "2025-05-13T09:24:51.646Z",
+    "visitCount": 3
+  },
+  {
+    "id": "dc610901-51ac-4f59-9199-c55446ab8cc1",
+    "url": "https://github.com/mrinal1224/SST-dev-2-Assignments/blob/main/promises/4.md",
+    "title": "SST-dev-2-Assignments/promises/4.md at main · mrinal1224/SST-dev-2-Assignments",
+    "category": "JavaScript",
+    "createdAt": "2025-05-13T09:24:10.855Z",
+    "lastVisited": "2025-05-13T09:24:51.646Z",
+    "visitCount": 3
+  },
+  {
+    "id": "e8d48525-c78e-4ede-9929-ee3a230a1950",
+    "url": "https://github.com/HaythemLazaar/toCopy",
+    "title": "HaythemLazaar/toCopy: Landing page for a tool that generates fake whatsapp chat conversation",
+    "category": "JavaScript",
+    "createdAt": "2025-05-13T09:24:10.855Z",
+    "lastVisited": "2025-05-13T09:24:51.646Z",
+    "visitCount": 3
+  },
+  {
+    "id": "6af72f0f-1f25-47db-b906-8718989405b4",
+    "url": "https://www.codementor.io/projects/reactjs",
+    "title": "React projects to learn programming - DevProjects",
+    "category": "JavaScript",
+    "createdAt": "2025-05-13T09:24:10.855Z",
+    "lastVisited": "2025-05-13T09:24:51.646Z",
+    "visitCount": 3
+  },
+  {
+    "id": "f60b5389-f00c-49ca-85e2-1996f5194eb7",
+    "url": "https://github.com/expo-starter/expo-local-first-template",
+    "title": "expo-starter/expo-local-first-template: 📱 A template for your local-first Expo project: Bun, Expo 51, TypeScript, TailwindCSS, DrizzleORM, Sqlite, EAS, GitHub Actions, Env Vars, expo-router, react-hook-form.",
+    "category": "JavaScript",
+    "createdAt": "2025-05-13T09:24:10.855Z",
+    "lastVisited": "2025-05-13T09:24:51.646Z",
+    "visitCount": 3
+  },
+  {
+    "id": "fe4f2f95-7218-490b-874b-5e22d8309b1b",
+    "url": "https://www.reddit.com/r/reactnative/comments/133kj5x/how_to_learn_react_native_from_scratch/",
+    "title": "How to learn react native from scratch : r/reactnative",
+    "category": "JavaScript",
+    "createdAt": "2025-05-13T09:24:10.855Z",
+    "lastVisited": "2025-05-13T09:24:51.646Z",
+    "visitCount": 3
+  },
+  {
+    "id": "cc7c09d8-6d08-4a86-988f-368863419001",
+    "url": "https://github.com/sanjaysamantra1/react_notes/blob/main/React%20Notes.txt",
+    "title": "react_notes/React Notes.txt at main · sanjaysamantra1/react_notes",
+    "category": "JavaScript",
+    "createdAt": "2025-05-13T09:24:10.856Z",
+    "lastVisited": "2025-05-13T09:24:51.646Z",
+    "visitCount": 3
+  },
+  {
+    "id": "041c8258-05e2-4b75-bb86-8e9fa2c9e43a",
+    "url": "https://www.newline.co/fullstack-react/assets/media/sGEMe/MNzue/30-days-of-react-ebook-fullstackio.pdf",
+    "title": "30-days-of-react-book-cover.png",
+    "category": "JavaScript",
+    "createdAt": "2025-05-13T09:24:10.856Z",
+    "lastVisited": "2025-05-13T09:24:51.646Z",
+    "visitCount": 3
+  },
+  {
+    "id": "6a9679de-9171-48d7-9aa6-7d3921729943",
+    "url": "file:///C:/Users/ujjwa/Downloads/002%20Useful%20Resources%20for%20Part%202.html",
+    "title": "002 Useful Resources for Part 2.html",
+    "category": "JavaScript",
+    "createdAt": "2025-05-13T09:24:10.856Z",
+    "lastVisited": "2025-05-13T09:24:51.646Z",
+    "visitCount": 3
+  },
+  {
+    "id": "41ed111e-1d61-4986-bc63-72acc7935534",
+    "url": "https://developer.chrome.com/docs/extensions/get-started/tutorial/hello-world",
+    "title": "Hello World extension  |  Chrome Extensions  |  Chrome for Developers",
+    "category": "JavaScript",
+    "createdAt": "2025-05-13T09:24:10.856Z",
+    "lastVisited": "2025-05-13T09:24:51.646Z",
+    "visitCount": 3
+  },
+  {
+    "id": "2e5d1439-5cc0-43a2-9636-b576df3e8ebc",
+    "url": "https://redux-toolkit.js.org/tutorials/quick-start",
+    "title": "Quick Start | Redux Toolkit",
+    "category": "JavaScript",
+    "createdAt": "2025-05-13T09:24:10.856Z",
+    "lastVisited": "2025-05-13T09:24:51.646Z",
+    "visitCount": 3
+  },
+  {
+    "id": "e72a3b9b-94c1-4dbd-bd5c-87f81d466639",
+    "url": "https://www.reddit.com/r/reactjs/comments/1csc4gs/have_an_interview_tomorrow_on_reactjs_pls_help/",
+    "title": "Have an interview tomorrow on reactjs, pls help with questions : r/reactjs",
+    "category": "JavaScript",
+    "createdAt": "2025-05-13T09:24:10.856Z",
+    "lastVisited": "2025-05-13T09:24:51.646Z",
+    "visitCount": 3
+  },
+  {
+    "id": "a500f94a-cf70-4f99-93d0-7598d57a23a4",
+    "url": "https://github.com/akarsh1995/leetcode-graphql-queries/blob/main/problemset_page/problemset_page.graphql",
+    "title": "leetcode-graphql-queries/problemset_page/problemset_page.graphql at main · akarsh1995/leetcode-graphql-queries",
+    "category": "JavaScript",
+    "createdAt": "2025-05-13T09:24:10.856Z",
+    "lastVisited": "2025-05-13T09:24:51.646Z",
+    "visitCount": 3
+  },
+  {
+    "id": "992c0f0e-2e82-46fc-9eb6-9801759d9f59",
+    "url": "https://sqlzoo.net/wiki/SQL_Tutorial",
+    "title": "SQLZoo",
+    "category": "DBMS",
+    "createdAt": "2025-05-13T09:24:10.856Z",
+    "lastVisited": "2025-05-13T09:24:51.646Z",
+    "visitCount": 3
+  },
+  {
+    "id": "decfa22e-46e6-4396-becb-ab1d8d2f1574",
+    "url": "https://db.grussell.org/",
+    "title": "Database eLearning",
+    "category": "DBMS",
+    "createdAt": "2025-05-13T09:24:10.856Z",
+    "lastVisited": "2025-05-13T09:24:51.646Z",
+    "visitCount": 3
+  },
+  {
+    "id": "5e24c695-c045-4df3-84fb-938fd391fcbb",
+    "url": "https://www.db-book.com/",
+    "title": "Database System Concepts - 7th edition",
+    "category": "DBMS",
+    "createdAt": "2025-05-13T09:24:10.856Z",
+    "lastVisited": "2025-05-13T09:24:51.647Z",
+    "visitCount": 3
+  },
+  {
+    "id": "6c1e8e0e-6faa-47a3-9b75-ecfc771f8e6c",
+    "url": "https://usemynotes.com/dbms/",
+    "title": "Database Management Systems [DBMS] - UseMyNotes",
+    "category": "DBMS",
+    "createdAt": "2025-05-13T09:24:10.856Z",
+    "lastVisited": "2025-05-13T09:24:51.647Z",
+    "visitCount": 3
+  },
+  {
+    "id": "35795fcd-1c9d-4ec1-8c81-403f549bdc6e",
+    "url": "http://www.redbook.io/",
+    "title": "Readings in Database Systems, 5th Edition",
+    "category": "DBMS",
+    "createdAt": "2025-05-13T09:24:10.856Z",
+    "lastVisited": "2025-05-13T09:24:51.647Z",
+    "visitCount": 3
+  },
+  {
+    "id": "90e43d20-5cdd-45c6-b1b2-8519cd5b4f5e",
+    "url": "https://erdplus.com/#/",
+    "title": "ERDPlus",
+    "category": "DBMS",
+    "createdAt": "2025-05-13T09:24:10.856Z",
+    "lastVisited": "2025-05-13T09:24:51.647Z",
+    "visitCount": 3
+  },
+  {
+    "id": "ab3e9003-5997-416c-87ef-266da3428357",
+    "url": "https://www.dbdebunk.com/",
+    "title": "DATABASE DEBUNKINGS",
+    "category": "DBMS",
+    "createdAt": "2025-05-13T09:24:10.857Z",
+    "lastVisited": "2025-05-13T09:24:51.647Z",
+    "visitCount": 3
+  },
+  {
+    "id": "1f7186c7-51ca-4605-b46d-0793aed1e351",
+    "url": "https://www.red-gate.com/simple-talk/opinion/opinion-pieces/chris-date-and-the-relational-model/",
+    "title": "Chris Date and the Relational Model - Simple Talk",
+    "category": "DBMS",
+    "createdAt": "2025-05-13T09:24:10.857Z",
+    "lastVisited": "2025-05-13T09:24:51.647Z",
+    "visitCount": 3
+  },
+  {
+    "id": "b07cac44-914b-4d8d-904f-0aa5b8bdeee2",
+    "url": "https://erdplus.com/",
+    "title": "ERDPlus",
+    "category": "DBMS",
+    "createdAt": "2025-05-13T09:24:10.857Z",
+    "lastVisited": "2025-05-13T09:24:51.647Z",
+    "visitCount": 3
+  },
+  {
+    "id": "cec64a91-b829-43bb-91b2-43f2b8fcaad6",
+    "url": "https://neetishop.medium.com/best-learning-path-to-master-sql-server-4b4de580a2ad",
+    "title": "Best learning path to master SQL Server | by Neetish Raj | Medium",
+    "category": "DBMS",
+    "createdAt": "2025-05-13T09:24:10.857Z",
+    "lastVisited": "2025-05-13T09:24:51.647Z",
+    "visitCount": 3
+  },
+  {
+    "id": "ce5a8836-a681-44cc-8357-e193a31ba287",
+    "url": "https://www.youtube.com/playlist?list=PLSE8ODhjZXjYDBpQnSymaectKjxCy6BYq",
+    "title": "(32) CMU Intro to Database Systems (15-445/645 - Fall 2024) - YouTube",
+    "category": "DBMS",
+    "createdAt": "2025-05-13T09:24:10.857Z",
+    "lastVisited": "2025-05-13T09:24:51.647Z",
+    "visitCount": 3
+  },
+  {
+    "id": "99c9bdd3-67c5-4b93-bcea-aea9bf8b43bb",
+    "url": "https://raw.githubusercontent.com/sharjeelsayed/learn.sharjeelsayed.com/master/selfupgradeitprof.txt",
+    "title": "raw.githubusercontent.com/sharjeelsayed/learn.sharjeelsayed.com/master/selfupgradeitprof.txt",
+    "category": "DBMS",
+    "createdAt": "2025-05-13T09:24:10.857Z",
+    "lastVisited": "2025-05-13T09:24:51.647Z",
+    "visitCount": 3
+  },
+  {
+    "id": "bc846a43-c521-479f-b5aa-ecce01d424d6",
+    "url": "https://pages.cs.wisc.edu/~remzi/OSTEP/",
+    "title": "Operating Systems: Three Easy Pieces",
+    "category": "DBMS",
+    "createdAt": "2025-05-13T09:24:10.857Z",
+    "lastVisited": "2025-05-13T09:24:51.647Z",
+    "visitCount": 3
+  },
+  {
+    "id": "909616f2-20a9-4f4c-bbd1-ebc88d7ce361",
+    "url": "https://www.freebookcentre.net/Database/Free-Database-Systems-Books-Download.html",
+    "title": "Free Database Systems Books Download | Ebooks Online Read books",
+    "category": "DBMS",
+    "createdAt": "2025-05-13T09:24:10.857Z",
+    "lastVisited": "2025-05-13T09:24:51.647Z",
+    "visitCount": 3
+  },
+  {
+    "id": "b145a5dd-ffc7-4765-9fdd-902499b7627a",
+    "url": "https://people.cs.rutgers.edu/~pxk/416/syllabus.html",
+    "title": "Operating Systems Design Syllabus",
+    "category": "DBMS",
+    "createdAt": "2025-05-13T09:24:10.857Z",
+    "lastVisited": "2025-05-13T09:24:51.647Z",
+    "visitCount": 3
+  },
+  {
+    "id": "b6c6e17f-2e85-4f5a-b74a-e0e89f7dadd5",
+    "url": "https://willendless.github.io/assets/os_arm_doc/Operating%20System%20Design%20The%20Xinu%20Approach.pdf",
+    "title": "Operating System Design The Xinu Approach.pdf",
+    "category": "DBMS",
+    "createdAt": "2025-05-13T09:24:10.858Z",
+    "lastVisited": "2025-05-13T09:24:51.647Z",
+    "visitCount": 3
+  },
+  {
+    "id": "652a30ea-1326-490b-bc02-56fb8554f460",
+    "url": "https://wiki.osdev.org/Expanded_Main_Page",
+    "title": "Expanded Main Page - OSDev Wiki",
+    "category": "DBMS",
+    "createdAt": "2025-05-13T09:24:10.858Z",
+    "lastVisited": "2025-05-13T09:24:51.647Z",
+    "visitCount": 3
+  },
+  {
+    "id": "476babea-ee47-4ffb-af2f-b0a1b4d940e3",
+    "url": "https://archive.org/details/UCBerkeley_Course_Computer_Science_186",
+    "title": "UCBerkeley Course Computer Science 186 : Free Download, Borrow, and Streaming : Internet Archive",
+    "category": "DBMS",
+    "createdAt": "2025-05-13T09:24:10.858Z",
+    "lastVisited": "2025-05-13T09:24:51.647Z",
+    "visitCount": 3
+  },
+  {
+    "id": "fa405656-f2ba-4d46-9d0d-8039161244bf",
+    "url": "https://learning.edx.org/course/course-v1:HarvardX+CS50SQL+SQL/home",
+    "title": "Course | CS50's Introduction to Databases with SQL | edX",
+    "category": "DBMS",
+    "createdAt": "2025-05-13T09:24:10.858Z",
+    "lastVisited": "2025-05-13T09:24:51.647Z",
+    "visitCount": 3
+  },
+  {
+    "id": "2b026dd3-79b8-40ed-9609-ae639e0c54de",
+    "url": "https://chatgpt.com/c/680921ca-49b4-8000-b52d-8195cc269c28",
+    "title": "DBMS Learning Summary",
+    "category": "DBMS",
+    "createdAt": "2025-05-13T09:24:10.858Z",
+    "lastVisited": "2025-05-13T09:24:51.647Z",
+    "visitCount": 3
+  },
+  {
+    "id": "a86a6c41-60b7-40d2-a0fd-d5bed5cd360f",
+    "url": "https://claude.ai/chat/117423fc-d282-4e10-bfcb-d127a076b6f9",
+    "title": "Building a Chrome Bookmark Sync Extension - Claude",
+    "category": "JavaScript",
+    "createdAt": "2025-05-13T09:24:10.858Z",
+    "lastVisited": "2025-05-13T09:24:51.647Z",
+    "visitCount": 3
+  },
+  {
+    "id": "b08f4b10-b332-430f-94b4-38d4a0977822",
+    "url": "https://getpocket.com/add?_gl=1*1o5x238*_ga*MTk0NzcyNzk3MS4xNzQ2NjQ3MDMy*_ga_2VC139B3XV*czE3NDY2NDcwMzEkbzEkZzAkdDE3NDY2NDcwMzEkajAkbDAkaDA.",
+    "title": "Pocket: How to Save",
+    "category": "JavaScript",
+    "createdAt": "2025-05-13T09:24:10.858Z",
+    "lastVisited": "2025-05-13T09:24:51.647Z",
+    "visitCount": 3
+  },
+  {
+    "id": "e03cccaa-7347-4651-b24d-605c1723269a",
+    "url": "http://localhost:5174/api/health",
+    "title": "localhost:5174/api/health",
+    "category": "JavaScript",
+    "createdAt": "2025-05-13T09:24:10.859Z",
+    "lastVisited": "2025-05-13T09:24:51.647Z",
+    "visitCount": 3
+  },
+  {
+    "id": "7ea6e8c9-5922-419a-bd73-bca7cb68e88d",
+    "url": "https://github.com/Ujjwaljain16/chrome-bookmark-bridge",
+    "title": "Ujjwaljain16/chrome-bookmark-bridge",
+    "category": "JavaScript",
+    "createdAt": "2025-05-13T09:24:10.859Z",
+    "lastVisited": "2025-05-13T09:24:51.647Z",
+    "visitCount": 3
+  },
+  {
+    "id": "7a4da7fd-c6a6-4e1c-8d73-54ffec0c2faf",
+    "url": "http://localhost:5173/settings",
+    "title": "Vite + React",
+    "category": "JavaScript",
+    "createdAt": "2025-05-13T09:24:10.859Z",
+    "lastVisited": "2025-05-13T09:24:51.647Z",
+    "visitCount": 3
+  },
+  {
+    "id": "bd2a18e7-218c-40bd-ba9b-a9849414e47e",
+    "url": "https://www.reddit.com/r/indiasocial/comments/1cmhtdc/drop_your_banger_shayari_in_here_let_others_rate/",
+    "title": "Drop your banger shayari in here. Let others' rate them on 1 to 10. : r/indiasocial",
+    "category": "JavaScript",
+    "createdAt": "2025-05-13T09:24:10.859Z",
+    "lastVisited": "2025-05-13T09:24:51.647Z",
+    "visitCount": 3
+  },
+  {
+    "id": "40618750-e57f-4826-9363-df7f0eb6fb4a",
+    "url": "http://localhost:3000/api/bookmarks/ai-enrich",
+    "title": "Error",
+    "category": "JavaScript",
+    "createdAt": "2025-05-13T09:24:10.859Z",
+    "lastVisited": "2025-05-13T09:24:51.647Z",
+    "visitCount": 3
+  },
+  {
+    "id": "971afc63-59d5-4172-b1b0-8cc9cd265572",
+    "url": "https://www.cursor.com/students",
+    "title": "Cursor for Students | Cursor - The AI Code Editor",
+    "category": "JavaScript",
+    "createdAt": "2025-05-13T09:24:10.859Z",
+    "lastVisited": "2025-05-13T09:24:51.648Z",
+    "visitCount": 3
+  },
+  {
+    "id": "9cfd1483-1127-4113-90be-c62569030c7b",
+    "url": "https://devdocs.io/",
+    "title": "DevDocs API Documentation",
+    "category": "JavaScript",
+    "createdAt": "2025-05-13T09:24:10.859Z",
+    "lastVisited": "2025-05-13T09:24:51.648Z",
+    "visitCount": 3
+  },
+  {
+    "id": "1cd74153-4670-4b63-a973-98897f3a6935",
+    "url": "https://chatgpt.com/c/681fabac-4d28-8000-abab-69a848d0625a",
+    "title": "Restore pushed code",
+    "category": "JavaScript",
+    "createdAt": "2025-05-13T09:24:10.859Z",
+    "lastVisited": "2025-05-13T09:24:51.648Z",
+    "visitCount": 3
+  },
+  {
+    "id": "f621d1b8-e8d9-424b-9680-2cefb1321a4a",
+    "url": "https://www.trawell.in/karnataka/shravanabelagola/places-to-visit-things-to-do",
+    "title": "22 Best Places to Visit in Shravanabelagola, Things to Do & Sightseeing (2024)",
+    "category": "Other bookmarks",
+    "createdAt": "2025-05-13T09:24:10.859Z",
+    "lastVisited": "2025-05-13T09:24:51.648Z",
+    "visitCount": 3
+  },
+  {
+    "id": "3fbfd454-b316-46b2-8785-0d9316f2904d",
+    "url": "https://www.reddit.com/r/golang/comments/n5ppx5/some_resources_that_have_helped_me_learn_golang/",
+    "title": "Some resources that have helped me learn golang over the last 3 years. : r/golang",
+    "category": "Other bookmarks",
+    "createdAt": "2025-05-13T09:24:10.859Z",
+    "lastVisited": "2025-05-13T09:24:51.648Z",
+    "visitCount": 3
+  },
+  {
+    "id": "5be4122f-7102-48c7-962f-3ab9bdff237f",
+    "url": "https://go101.org/",
+    "title": "Go 101 -Go 101",
+    "category": "Other bookmarks",
+    "createdAt": "2025-05-13T09:24:10.859Z",
+    "lastVisited": "2025-05-13T09:24:51.648Z",
+    "visitCount": 3
+  },
+  {
+    "id": "af76daf4-c98f-4d65-bd3e-b09c6e651304",
+    "url": "https://mohiyaddeenraza.vercel.app/",
+    "title": "Mohiyaddeen Raza - portfolio",
+    "category": "Other bookmarks",
+    "createdAt": "2025-05-13T09:24:10.859Z",
+    "lastVisited": "2025-05-13T09:24:51.648Z",
+    "visitCount": 3
+  },
+  {
+    "id": "db83e725-8eb9-46fc-8d26-c87dd27c4e73",
+    "url": "https://github.com/jonasschmedtmann/complete-javascript-course",
+    "title": "jonasschmedtmann/complete-javascript-course: Starter files, final projects, and FAQ for my Complete JavaScript course",
+    "category": "Other bookmarks",
+    "createdAt": "2025-05-13T09:24:10.860Z",
+    "lastVisited": "2025-05-13T09:24:51.648Z",
+    "visitCount": 3
+  },
+  {
+    "id": "898679b8-e365-4f41-a57a-89148e5b745b",
+    "url": "https://github.com/Thant998/oop-project",
+    "title": "Thant998/oop-project: Mini Project in Java Object Oriented Programming",
+    "category": "JAVA OOPS",
+    "createdAt": "2025-05-13T09:24:10.860Z",
+    "lastVisited": "2025-05-13T09:24:51.648Z",
+    "visitCount": 3
+  },
+  {
+    "id": "bfbf48e8-852a-415e-9c79-4534b78ee567",
+    "url": "https://github.com/dyingpotato890/KTU-S3-LAB",
+    "title": "dyingpotato890/KTU-S3-LAB: This repository is dedicated to storing programs necessary for the Data Structures and Object-Oriented Programming lab sessions conducted in Semester 3 for KTU students (2019 Syllabus).",
+    "category": "JAVA OOPS",
+    "createdAt": "2025-05-13T09:24:10.860Z",
+    "lastVisited": "2025-05-13T09:24:51.648Z",
+    "visitCount": 3
+  },
+  {
+    "id": "0c3ea721-7e4b-45b5-9513-e9945788f102",
+    "url": "https://github.com/topics/object-oriented-programming-project?l=java&o=asc&s=updated",
+    "title": "object-oriented-programming-project · GitHub Topics",
+    "category": "JAVA OOPS",
+    "createdAt": "2025-05-13T09:24:10.860Z",
+    "lastVisited": "2025-05-13T09:24:51.648Z",
+    "visitCount": 3
+  },
+  {
+    "id": "caff51b3-a121-46cc-8d48-ea512909cdff",
+    "url": "https://github.com/disha2sinha/Object-Oriented-Programming-in-Java",
+    "title": "disha2sinha/Object-Oriented-Programming-in-Java: This repository can act as a guide if you are trying to learn Java",
+    "category": "JAVA OOPS",
+    "createdAt": "2025-05-13T09:24:10.860Z",
+    "lastVisited": "2025-05-13T09:24:51.648Z",
+    "visitCount": 3
+  },
+  {
+    "id": "8e3acbb6-45f2-4a1f-93d6-0c2002ea0852",
+    "url": "https://github.com/CodeChefVIT/resources/blob/master/OOPS/OOPS.md",
+    "title": "resources/OOPS/OOPS.md at master · CodeChefVIT/resources",
+    "category": "JAVA OOPS",
+    "createdAt": "2025-05-13T09:24:10.860Z",
+    "lastVisited": "2025-05-13T09:24:51.648Z",
+    "visitCount": 3
+  },
+  {
+    "id": "07d37556-f4a2-4b68-a43e-0668f133be7f",
+    "url": "https://github.com/manjunath5496/Java-Programming-Books",
+    "title": "manjunath5496/Java-Programming-Books: \"Java: write once, run away!\" – Brucee",
+    "category": "JAVA OOPS",
+    "createdAt": "2025-05-13T09:24:10.860Z",
+    "lastVisited": "2025-05-13T09:24:51.648Z",
+    "visitCount": 3
+  },
+  {
+    "id": "31a8f726-1396-48e5-af59-9f562422e6a9",
+    "url": "https://github.com/Nitin96Bisht/Java-Books",
+    "title": "Nitin96Bisht/Java-Books: Java Books",
+    "category": "JAVA OOPS",
+    "createdAt": "2025-05-13T09:24:10.860Z",
+    "lastVisited": "2025-05-13T09:24:51.649Z",
+    "visitCount": 3
+  },
+  {
+    "id": "c902ab96-34b9-4f80-bd01-78f2d4c4deb8",
+    "url": "https://github.com/avinashyadav16/Codeforces-CodeSolution-And-OOPs",
+    "title": "avinashyadav16/Codeforces-CodeSolution-And-OOPs: This repo contains solutions to codes from codeforces platform and concepts of OOPs & Data Structure in cpp.",
+    "category": "JAVA OOPS",
+    "createdAt": "2025-05-13T09:24:10.860Z",
+    "lastVisited": "2025-05-13T09:24:51.649Z",
+    "visitCount": 3
+  },
+  {
+    "id": "9e8e71ec-57f2-45a5-901f-dbb785e63333",
+    "url": "https://leetcode.com/problem-list/design/",
+    "title": "Design - LeetCode",
+    "category": "JAVA OOPS",
+    "createdAt": "2025-05-13T09:24:10.860Z",
+    "lastVisited": "2025-05-13T09:24:51.649Z",
+    "visitCount": 3
+  },
+  {
+    "id": "52cee95c-cf4d-422a-aa73-192fa4b4f0fa",
+    "url": "https://www.lintcode.com/problem/?typeId=6",
+    "title": "LintCode 炼码 - A more effective learning experience!",
+    "category": "JAVA OOPS",
+    "createdAt": "2025-05-13T09:24:10.860Z",
+    "lastVisited": "2025-05-13T09:24:51.649Z",
+    "visitCount": 3
+  },
+  {
+    "id": "ac551ff7-bcaa-4966-af98-26a806fb105e",
+    "url": "https://github.com/bethrobson/Head-First-Design-Patterns/tree/master/src/headfirst/designpatterns/decorator/starbuzz",
+    "title": "Head-First-Design-Patterns/src/headfirst/designpatterns/decorator/starbuzz at master · bethrobson/Head-First-Design-Patterns",
+    "category": "JAVA OOPS",
+    "createdAt": "2025-05-13T09:24:10.860Z",
+    "lastVisited": "2025-05-13T09:24:51.649Z",
+    "visitCount": 3
+  },
+  {
+    "id": "f07fa9c5-b86c-4f30-9426-d1659d9e9da0",
+    "url": "https://leetcode.com/discuss/interview-question/object-oriented-design/124739/Parking-Lot-Design-Using-OO-Design",
+    "title": "Parking Lot Design Using OO Design - LeetCode Discuss",
+    "category": "JAVA OOPS",
+    "createdAt": "2025-05-13T09:24:10.861Z",
+    "lastVisited": "2025-05-13T09:24:51.649Z",
+    "visitCount": 3
+  },
+  {
+    "id": "57d7a2f7-6697-4033-a644-93ad0332eaf0",
+    "url": "https://www.google.com/search?q=Design+Patterns%3A+Elements+of+Reusable+Object-Oriented+Software%E2%80%9D+by+E.+Gamma%2C+R.+Helm%2C+R.+Johnson%2C&rlz=1C1RXQR_enIN1124IN1124&oq=Design+Patterns%3A+Elements+of+Reusable+Object-Oriented+Software%E2%80%9D+by+E.+Gamma%2C+R.+Helm%2C+R.+Johnson%2C&gs_lcrp=EgZjaHJvbWUyBggAEEUYOTIHCAEQIRiPAjIHCAIQIRiPAtIBBzU2NWowajeoAgCwAgA&sourceid=chrome&ie=UTF-8",
+    "title": "Design Patterns: Elements of Reusable Object-Oriented Software” by E. Gamma, R. Helm, R. Johnson, - Google Search",
+    "category": "JAVA OOPS",
+    "createdAt": "2025-05-13T09:24:10.861Z",
+    "lastVisited": "2025-05-13T09:24:51.649Z",
+    "visitCount": 3
+  },
+  {
+    "id": "79736ebf-c518-4f92-9d08-4741a42280cd",
+    "url": "https://www.reactnativeschool.com/react-native-basics",
+    "title": "Build Mobile Apps with React Native - React Native Basics",
+    "category": "Other bookmarks",
+    "createdAt": "2025-05-13T09:24:10.861Z",
+    "lastVisited": "2025-05-13T09:24:51.649Z",
+    "visitCount": 3
+  },
+  {
+    "id": "79959b4c-fb2a-4ce0-9bc1-5d66ab8ff901",
+    "url": "https://learn.reactnativeschool.com/courses/175915/author_bio",
+    "title": "React Native Basics: Build a Currency Converter | React Native School",
+    "category": "Other bookmarks",
+    "createdAt": "2025-05-13T09:24:10.861Z",
+    "lastVisited": "2025-05-13T09:24:51.649Z",
+    "visitCount": 3
+  },
+  {
+    "id": "814ee1ba-2d46-43e4-8fd8-92705a55515b",
+    "url": "https://www.geeksforgeeks.org/create-a-currency-converter-using-react-native/",
+    "title": "Create a Currency Converter using React-Native - GeeksforGeeks",
+    "category": "Other bookmarks",
+    "createdAt": "2025-05-13T09:24:10.861Z",
+    "lastVisited": "2025-05-13T09:24:51.649Z",
+    "visitCount": 3
+  },
+  {
+    "id": "929d13e9-0789-4932-bd24-956806eeeae3",
+    "url": "https://overiq.com/python-101/",
+    "title": "Python Tutorial - OverIQ.com",
+    "category": "Python",
+    "createdAt": "2025-05-13T09:24:10.861Z",
+    "lastVisited": "2025-05-13T09:24:51.649Z",
+    "visitCount": 3
+  },
+  {
+    "id": "3662938e-b77b-42b8-bf16-97a78f3963b8",
+    "url": "https://overiq.com/python-101/#google_vignette",
+    "title": "Python Tutorial - OverIQ.com",
+    "category": "Python",
+    "createdAt": "2025-05-13T09:24:10.861Z",
+    "lastVisited": "2025-05-13T09:24:51.649Z",
+    "visitCount": 3
+  },
+  {
+    "id": "8c495afa-bf9a-4ee7-9682-aa17ec4e0fa9",
+    "url": "https://github.com/huangsam/ultimate-python",
+    "title": "huangsam/ultimate-python: Ultimate Python study guide :snake: :snake:",
+    "category": "Python",
+    "createdAt": "2025-05-13T09:24:10.861Z",
+    "lastVisited": "2025-05-13T09:24:51.649Z",
+    "visitCount": 3
+  },
+  {
+    "id": "6349adc3-4823-4808-bfa4-da3d5785ea09",
+    "url": "https://learnxinyminutes.com/docs/python/",
+    "title": "Learn Python in Y Minutes",
+    "category": "Python",
+    "createdAt": "2025-05-13T09:24:10.861Z",
+    "lastVisited": "2025-05-13T09:24:51.649Z",
+    "visitCount": 3
+  },
+  {
+    "id": "9c19efeb-ddfa-49e5-84f6-b8f8f2050a57",
+    "url": "https://web.archive.org/web/20200918083158/https://sinxloud.com/python-cheat-sheet-beginner-advanced/",
+    "title": "8 Best Python Cheat Sheets for Beginners & Intermediate Learners - 2019",
+    "category": "Python",
+    "createdAt": "2025-05-13T09:24:10.861Z",
+    "lastVisited": "2025-05-13T09:24:51.649Z",
+    "visitCount": 3
+  },
+  {
+    "id": "2d0a1cf0-c0f1-45f0-8aae-0e86c3e707b2",
+    "url": "https://docs.python.org/3/tutorial/",
+    "title": "The Python Tutorial — Python 3.13.0 documentation",
+    "category": "Python",
+    "createdAt": "2025-05-13T09:24:10.861Z",
+    "lastVisited": "2025-05-13T09:24:51.649Z",
+    "visitCount": 3
+  },
+  {
+    "id": "9a65d98a-96da-4fb3-b4dd-8369300f3ae8",
+    "url": "https://docs.python.org/3/",
+    "title": "3.13.0 Documentation",
+    "category": "Python",
+    "createdAt": "2025-05-13T09:24:10.862Z",
+    "lastVisited": "2025-05-13T09:24:51.649Z",
+    "visitCount": 3
+  },
+  {
+    "id": "f33273e4-c993-4e5a-aaec-785c4953e4e1",
+    "url": "https://codeforces.com/problemset/problem/214/A",
+    "title": "Problem - 214A - Codeforces",
+    "category": "AlgoStrike",
+    "createdAt": "2025-05-13T09:24:10.862Z",
+    "lastVisited": "2025-05-13T09:24:51.650Z",
+    "visitCount": 3
+  },
+  {
+    "id": "608b0771-16e8-400c-866d-e7ebbb2d1875",
+    "url": "https://codeforces.com/blog/entry/49494",
+    "title": "Number theory practice problems. - Codeforces",
+    "category": "AlgoStrike",
+    "createdAt": "2025-05-13T09:24:10.862Z",
+    "lastVisited": "2025-05-13T09:24:51.650Z",
+    "visitCount": 3
+  },
+  {
+    "id": "8315cf68-d9d6-44f0-b9c4-cf9cca4ec40e",
+    "url": "https://leetcode.com/discuss/interview-question/313216/binary-search-interview-questions",
+    "title": "Binary-search Interview Questions - LeetCode Discuss",
+    "category": "AlgoStrike",
+    "createdAt": "2025-05-13T09:24:10.862Z",
+    "lastVisited": "2025-05-13T09:24:51.650Z",
+    "visitCount": 3
+  },
+  {
+    "id": "b36ee90e-04e5-4e75-ae2a-fa4d2af586ef",
+    "url": "https://github.com/Zain-Tanveer/Product-Management/blob/main/register.html",
+    "title": "Product-Management/register.html at main · Zain-Tanveer/Product-Management",
+    "category": "AlgoStrike",
+    "createdAt": "2025-05-13T09:24:10.862Z",
+    "lastVisited": "2025-05-13T09:24:51.650Z",
+    "visitCount": 3
+  },
+  {
+    "id": "baf44190-d755-45ae-ac99-5729e6919894",
+    "url": "https://neetcode.io/roadmap",
+    "title": "Roadmap",
+    "category": "DSA",
+    "createdAt": "2025-05-13T09:24:10.862Z",
+    "lastVisited": "2025-05-13T09:24:51.650Z",
+    "visitCount": 3
+  },
+  {
+    "id": "71aaf81d-228b-4246-8fd8-ca8a5bbba13e",
+    "url": "https://www.dbooks.org/think-data-structures-1491972394/#google_vignette",
+    "title": "Think Data Structures.pdf - Free download books",
+    "category": "DSA",
+    "createdAt": "2025-05-13T09:24:10.862Z",
+    "lastVisited": "2025-05-13T09:24:51.650Z",
+    "visitCount": 3
+  },
+  {
+    "id": "2293c0dd-d635-44f9-9ed3-6d5f4799e9b0",
+    "url": "https://github.com/GauravWalia19/Free-Algorithms-Books/blob/main/Library/src/JAVASCRIPT/A-Common-Sense-Guide-to-Data-Structures-and-Algorithms-Level-Up-Your-Core-Programming-Skills.pdf",
+    "title": "Free-Algorithms-Books/Library/src/JAVASCRIPT/A-Common-Sense-Guide-to-Data-Structures-and-Algorithms-Level-Up-Your-Core-Programming-Skills.pdf at main · GauravWalia19/Free-Algorithms-Books",
+    "category": "DSA",
+    "createdAt": "2025-05-13T09:24:10.862Z",
+    "lastVisited": "2025-05-13T09:24:51.650Z",
+    "visitCount": 3
+  },
+  {
+    "id": "cb00dd14-b09e-4a19-bdf4-fe100de1b881",
+    "url": "https://www.mycompiler.io/@Ruchir",
+    "title": "User @Ruchir - myCompiler",
+    "category": "DSA",
+    "createdAt": "2025-05-13T09:24:10.862Z",
+    "lastVisited": "2025-05-13T09:24:51.650Z",
+    "visitCount": 3
+  },
+  {
+    "id": "f6c89393-0fa3-4dc7-a44b-4864c235313f",
+    "url": "https://leetcode.com/discuss/career/448024/topic-wise-problems-for-beginners",
+    "title": "Topic wise problems for Beginners - LeetCode Discuss",
+    "category": "DSA",
+    "createdAt": "2025-05-13T09:24:10.862Z",
+    "lastVisited": "2025-05-13T09:24:51.650Z",
+    "visitCount": 3
+  },
+  {
+    "id": "d4a84f09-3339-46fa-a54c-39061a4f742d",
+    "url": "https://github.com/tomorrowdevs-projects/real-world-projects/tree/main/projects/travel-web-scraper",
+    "title": "real-world-projects/projects/travel-web-scraper at main · tomorrowdevs-projects/real-world-projects",
+    "category": "Other bookmarks",
+    "createdAt": "2025-05-13T09:24:10.862Z",
+    "lastVisited": "2025-05-13T09:24:51.650Z",
+    "visitCount": 3
+  },
+  {
+    "id": "47e03c0c-b261-4b3d-b782-672f71121c21",
+    "url": "https://www.wix.com/studio/design",
+    "title": "Design Capabilities | Wix Studio",
+    "category": "Other bookmarks",
+    "createdAt": "2025-05-13T09:24:10.863Z",
+    "lastVisited": "2025-05-13T09:24:51.650Z",
+    "visitCount": 3
+  },
+  {
+    "id": "e195cadb-78c4-443f-9af7-4604daf309ce",
+    "url": "https://docs.google.com/forms/d/1uxXOgotrzRECwOofLnHx8ryP8NNzBnzLvRZi_3hWfSM/edit#responses",
+    "title": "Untitled form - Google Forms",
+    "category": "Other bookmarks",
+    "createdAt": "2025-05-13T09:24:10.863Z",
+    "lastVisited": "2025-05-13T09:24:51.650Z",
+    "visitCount": 3
+  },
+  {
+    "id": "5970db8e-1f88-46ba-83f4-ed2df14fc320",
+    "url": "https://github.com/greyhatguy007/Mathematics-for-Machine-Learning-and-Data-Science-Specialization-Coursera/tree/main",
+    "title": "greyhatguy007/Mathematics-for-Machine-Learning-and-Data-Science-Specialization-Coursera: Mathematics for Machine Learning and Data Science Specialization - Coursera - deeplearning.ai - solutions and notes",
+    "category": "Other bookmarks",
+    "createdAt": "2025-05-13T09:24:10.863Z",
+    "lastVisited": "2025-05-13T09:24:51.650Z",
+    "visitCount": 3
+  },
+  {
+    "id": "7d8bb3ec-61a4-400a-8398-f8e6ea574dec",
+    "url": "https://app.netlify.com/sites/reliable-paletas-c39e3b/deploys",
+    "title": "Deploys | reliable-paletas-c39e3b | Netlify",
+    "category": "Other bookmarks",
+    "createdAt": "2025-05-13T09:24:10.863Z",
+    "lastVisited": "2025-05-13T09:24:51.650Z",
+    "visitCount": 3
+  },
+  {
+    "id": "899818da-2059-475c-828e-64fe24921169",
+    "url": "https://app.netlify.com/sites/byte-hive/configuration/general",
+    "title": "General | Site configuration | reliable-paletas-c39e3b | Netlify",
+    "category": "Other bookmarks",
+    "createdAt": "2025-05-13T09:24:10.863Z",
+    "lastVisited": "2025-05-13T09:24:51.651Z",
+    "visitCount": 3
+  },
+  {
+    "id": "98423d5f-1913-4405-a7ea-6a18dfbe0675",
+    "url": "https://github.com/hemantshirsath/Expensetracker",
+    "title": "hemantshirsath/Expensetracker: Personal Expense Tracker and AI based budgetting assitance",
+    "category": "Other bookmarks",
+    "createdAt": "2025-05-13T09:24:10.863Z",
+    "lastVisited": "2025-05-13T09:24:51.651Z",
+    "visitCount": 3
+  },
+  {
+    "id": "2fdbb87f-7469-4f34-b628-ce609b114a8a",
+    "url": "https://github.com/bahuma20/firefly-iii-ai-categorize",
+    "title": "bahuma20/firefly-iii-ai-categorize: Automatically categorize your expenses by using OpenAI",
+    "category": "FinTech",
+    "createdAt": "2025-05-13T09:24:10.863Z",
+    "lastVisited": "2025-05-13T09:24:51.652Z",
+    "visitCount": 6
+  },
+  {
+    "id": "f0959e13-3683-449f-a9a2-be673140f566",
+    "url": "https://github.com/Mohit-15/UPIGO?utm_source=chatgpt.com",
+    "title": "Mohit-15/UPIGO: Unified Payments Interface (UPI) APIs using Django REST Framework.",
+    "category": "FinTech",
+    "createdAt": "2025-05-13T09:24:10.863Z",
+    "lastVisited": "2025-05-13T09:24:51.651Z",
+    "visitCount": 6
+  },
+  {
+    "id": "28fd0eee-c621-4ef5-975b-7ed84a798275",
+    "url": "https://github.com/gokulkrishh/expense.fyi?utm_source=chatgpt.com",
+    "title": "gokulkrishh/expense.fyi: Effortlessly track and manage expenses on-the-go with categorisation and logging.",
+    "category": "FinTech",
+    "createdAt": "2025-05-13T09:24:10.863Z",
+    "lastVisited": "2025-05-13T09:24:51.651Z",
+    "visitCount": 3
+  },
+  {
+    "id": "4864b316-ced5-4cc7-90e8-1ede2fe5f856",
+    "url": "https://app.expense.fyi/signup",
+    "title": "Sign up for Expense.fyi",
+    "category": "FinTech",
+    "createdAt": "2025-05-13T09:24:10.863Z",
+    "lastVisited": "2025-05-13T09:24:51.651Z",
+    "visitCount": 3
+  },
+  {
+    "id": "13ba2b2b-da3d-4746-b534-4685a0696964",
+    "url": "https://decentro.tech/resources/upi-apis?utm_source=chatgpt.com",
+    "title": "UPI Payment APIs | UPI Integration APIs For Business | Decentro",
+    "category": "FinTech",
+    "createdAt": "2025-05-13T09:24:10.863Z",
+    "lastVisited": "2025-05-13T09:24:51.651Z",
+    "visitCount": 3
+  },
+  {
+    "id": "313c6aa0-84bc-4c7f-8bc2-1ee41f230b86",
+    "url": "https://www.npci.org.in/what-we-do/upi/3rd-party-apps",
+    "title": "UPI Apps - List of UPI 3rd Party Apps | NPCI",
+    "category": "FinTech",
+    "createdAt": "2025-05-13T09:24:10.864Z",
+    "lastVisited": "2025-05-13T09:24:51.652Z",
+    "visitCount": 3
+  },
+  {
+    "id": "a7c64620-e431-4130-9ae8-d4b3b670e97f",
+    "url": "https://docs.firefly-iii.org/?mtm_campaign=firefly-iii-org&mtm_kwd=bottom-link",
+    "title": "Firefly III documentation",
+    "category": "FinTech",
+    "createdAt": "2025-05-13T09:24:10.864Z",
+    "lastVisited": "2025-05-13T09:24:51.652Z",
+    "visitCount": 3
+  },
+  {
+    "id": "aeba841e-9aa0-451e-a14f-6ca2846a410f",
+    "url": "https://docs.setu.co/data/account-aggregator/quickstart",
+    "title": "Account Aggregator quickstart — Setu Docs",
+    "category": "FinTech",
+    "createdAt": "2025-05-13T09:24:10.864Z",
+    "lastVisited": "2025-05-13T09:24:51.652Z",
+    "visitCount": 3
+  },
+  {
+    "id": "8540440a-1936-4929-a19d-311d4ce7097a",
+    "url": "https://status.setu.co/",
+    "title": "Setu - Status",
+    "category": "FinTech",
+    "createdAt": "2025-05-13T09:24:10.864Z",
+    "lastVisited": "2025-05-13T09:24:51.652Z",
+    "visitCount": 3
+  },
+  {
+    "id": "0a40105c-ab56-4f43-8fd8-37e73316a508",
+    "url": "https://github.com/Akash-Ramjyothi/UPI-Pay",
+    "title": "Akash-Ramjyothi/UPI-Pay: The project \"UPI Pay\" is an Android Application to make Payments through UPI (Unified Payments Interface). The Amount, UPI ID, Name and Remarks are set through the App, and when the button is clicked, the entities are Parsed into the selected desired application and after authenticating, the Payment is made to the specified Reciever. Made this project to demonstrate the support and integration of UPI Payment gateway into custom 3rd party applications.",
+    "category": "FinTech",
+    "createdAt": "2025-05-13T09:24:10.864Z",
+    "lastVisited": "2025-05-13T09:24:51.652Z",
+    "visitCount": 3
+  },
+  {
+    "id": "2a7960e9-2c13-47c6-9213-021a75c546ca",
+    "url": "https://github.com/HimanshuSingour/UPI-Payment-Application",
+    "title": "HimanshuSingour/UPI-Payment-Application: Developing a Java Spring Boot and Angular-based full-stack app, it offers bill payments, recharges, and flight bookings. Integration with the \"Bank of Bharat\" on GitHub enables seamless payment processing for these services, enhancing user convenience within the same tech stack.",
+    "category": "FinTech",
+    "createdAt": "2025-05-13T09:24:10.864Z",
+    "lastVisited": "2025-05-13T09:24:51.652Z",
+    "visitCount": 3
+  },
+  {
+    "id": "ef81508d-c44b-4787-bc4b-5afe41770664",
+    "url": "https://apiportal.axisbank.com/portal/product/27914#:~:text=UPI%2037%20APIs&text=Unlike%20typical%20payment%20systems%2C%20UPI,number%20and%20bank%20IFSC%20code.&text=Transaction%20APIs%20are%20a%20set,you%20to%20check%20account%20balance.",
+    "title": "UPI | API Developer Portal",
+    "category": "FinTech",
+    "createdAt": "2025-05-13T09:24:10.864Z",
+    "lastVisited": "2025-05-13T09:24:51.652Z",
+    "visitCount": 3
+  },
+  {
+    "id": "5c374426-50fc-499f-853c-4d634ddf3091",
+    "url": "https://chatgpt.com/c/67ad84b2-0a24-8000-999a-18b8399ce2d3",
+    "title": "Firefly III UPI Tracking",
+    "category": "FinTech",
+    "createdAt": "2025-05-13T09:24:10.864Z",
+    "lastVisited": "2025-05-13T09:24:51.652Z",
+    "visitCount": 3
+  },
+  {
+    "id": "9772f37a-a36e-4692-81b0-0cd154cf3352",
+    "url": "https://setu.co/",
+    "title": "Setu — The fastest way to offer the latest in fintech",
+    "category": "FinTech",
+    "createdAt": "2025-05-13T09:24:10.865Z",
+    "lastVisited": "2025-05-13T09:24:51.652Z",
+    "visitCount": 3
+  },
+  {
+    "id": "be36bab9-ca03-4af1-835c-9b9098e3ec3b",
+    "url": "https://docs.setu.co/payments/umap/quickstart/aggregators",
+    "title": "UPI Setu - Quickstart for aggregators — Setu Docs",
+    "category": "FinTech",
+    "createdAt": "2025-05-13T09:24:10.865Z",
+    "lastVisited": "2025-05-13T09:24:51.652Z",
+    "visitCount": 3
+  },
+  {
+    "id": "a6e5401c-83a6-4367-b129-336b6ca1a14e",
+    "url": "https://www.google.com/search?q=etmoney&rlz=1C1RXQR_enIN1124IN1124&oq=ETMo&gs_lcrp=EgZjaHJvbWUqCggAEAAYsQMYgAQyCggAEAAYsQMYgAQyBwgBEAAYgAQyBggCEEUYOTIHCAMQABiABDIHCAQQABiABDIHCAUQABiABDIHCAYQABiABDIHCAcQABiABDIHCAgQABiABDIHCAkQABiABNIBCDY4MDVqMGo3qAIAsAIA&sourceid=chrome&ie=UTF-8",
+    "title": "etmoney - Google Search",
+    "category": "FinTech",
+    "createdAt": "2025-05-13T09:24:10.865Z",
+    "lastVisited": "2025-05-13T09:24:51.653Z",
+    "visitCount": 3
+  },
+  {
+    "id": "df71e625-5cba-4da0-adae-fd1f75c5a2ff",
+    "url": "https://mail.google.com/mail/u/0/#inbox?compose=GTvVlcSHxwJnrNFzdZVTdDnxLtVMVPxXLSCCfhHwcvhdQrqwHBvDkwSNfRmTjmbjHcpCPgRmTbMhM",
+    "title": "Inbox (3,003) - jainujjwal1609@gmail.com - Gmail",
+    "category": "FinTech",
+    "createdAt": "2025-05-13T09:24:10.865Z",
+    "lastVisited": "2025-05-13T09:24:51.653Z",
+    "visitCount": 3
+  },
+  {
+    "id": "a116c956-8f66-49c1-8381-1001487aa249",
+    "url": "https://www.google.com/search?q=sms+parser&rlz=1C1RXQR_enIN1124IN1124&oq=sms+parser&gs_lcrp=EgZjaHJvbWUyCQgAEEUYORiABDIICAEQABgWGB4yCAgCEAAYFhgeMggIAxAAGBYYHjINCAQQABiGAxiABBiKBTINCAUQABiGAxiABBiKBTINCAYQABiGAxiABBiKBTINCAcQABiGAxiABBiKBdIBCDIzMDJqMGo3qAIAsAIA&sourceid=chrome&ie=UTF-8",
+    "title": "sms parser - Google Search",
+    "category": "FinTech",
+    "createdAt": "2025-05-13T09:24:10.865Z",
+    "lastVisited": "2025-05-13T09:24:51.653Z",
+    "visitCount": 3
+  },
+  {
+    "id": "4249ae6c-ffb4-42e2-9501-07d70eaeca10",
+    "url": "https://www.google.com/search?q=twilio&rlz=1C1RXQR_enIN1124IN1124&oq=twilio&gs_lcrp=EgZjaHJvbWUqBwgAEAAYjwIyBwgAEAAYjwIyGAgBEC4YQxiDARjHARixAxjRAxiABBiKBTIPCAIQABhDGLEDGIAEGIoFMgwIAxAAGEMYgAQYigUyDAgEEAAYQxiABBiKBTIKCAUQABixAxiABDINCAYQABiDARixAxiABDINCAcQABiDARixAxiABDIPCAgQABhDGLEDGIAEGIoFMg0ICRAAGIMBGLEDGIAE0gEIMTQ1MWowajeoAgiwAgE&sourceid=chrome&ie=UTF-8",
+    "title": "twilio - Google Search",
+    "category": "FinTech",
+    "createdAt": "2025-05-13T09:24:10.865Z",
+    "lastVisited": "2025-05-13T09:24:51.653Z",
+    "visitCount": 3
+  },
+  {
+    "id": "5fe38fef-ccff-4bea-909c-1ceb97d357e9",
+    "url": "https://chat.deepseek.com/",
+    "title": "DeepSeek - Into the Unknown",
+    "category": "FinTech",
+    "createdAt": "2025-05-13T09:24:10.865Z",
+    "lastVisited": "2025-05-13T09:24:51.653Z",
+    "visitCount": 3
+  },
+  {
+    "id": "be0b9b75-069b-46fa-9ab9-ecdaeb439e75",
+    "url": "https://topmate.io/",
+    "title": "Discover and connect with top Experts",
+    "category": "FinTech",
+    "createdAt": "2025-05-13T09:24:10.865Z",
+    "lastVisited": "2025-05-13T09:24:51.653Z",
+    "visitCount": 3
+  },
+  {
+    "id": "00d59894-8f8d-4dff-9631-b3cd000e36d2",
+    "url": "https://topmate.io/?category=Referral+in+15+mins&category_id=56&page=1",
+    "title": "Discover and connect with top Experts",
+    "category": "FinTech",
+    "createdAt": "2025-05-13T09:24:10.865Z",
+    "lastVisited": "2025-05-13T09:24:51.653Z",
+    "visitCount": 3
+  },
+  {
+    "id": "0ab246ee-dab7-42e0-98f5-c56e379a8aa5",
+    "url": "https://www.google.com/search?q=how+to+bookmarkl+all+tabs+in+once&rlz=1C1RXQR_enIN1124IN1124&oq=how+to+bookmarkl+all+tabs+in+once&gs_lcrp=EgZjaHJvbWUyBggAEEUYOTIICAEQABgWGB4yCAgCEAAYFhgeMggIAxAAGBYYHjIICAQQABgWGB4yCAgFEAAYFhgeMggIBhAAGBYYHjIICAcQABgWGB4yCAgIEAAYFhgeMggICRAAGBYYHtIBCDYwMDZqMGo3qAIAsAIA&sourceid=chrome&ie=UTF-8",
+    "title": "how to bookmarkl all tabs in once - Google Search",
+    "category": "FinTech",
+    "createdAt": "2025-05-13T09:24:10.865Z",
+    "lastVisited": "2025-05-13T09:24:51.653Z",
+    "visitCount": 3
+  },
+  {
+    "id": "8988755a-ba49-4475-bcfa-20f227c72e7e",
+    "url": "https://vision.hack2skill.com/event/genaiexchange/dashboard/roadmap?utm_source=hack2skill&utm_medium=homepage",
+    "title": "Gen AI Exchange Program | Roadmap | Hack2skill",
+    "category": "Other bookmarks",
+    "createdAt": "2025-05-13T09:24:10.866Z",
+    "lastVisited": "2025-05-13T09:24:51.653Z",
+    "visitCount": 3
+  },
+  {
+    "id": "c62c2486-0994-4781-a4f7-6cf7db6702ad",
+    "url": "https://www.reddit.com/r/BollywoodMusic/comments/11kbfc3/i_made_a_playlist_of_the_beautiful_songs_about/",
+    "title": "I made a playlist of the beautiful songs about eyes, please give it a listen and maybe like? Thanks! : r/BollywoodMusic",
+    "category": "Other bookmarks",
+    "createdAt": "2025-05-13T09:24:10.866Z",
+    "lastVisited": "2025-05-13T09:24:51.653Z",
+    "visitCount": 3
   }
 ]
