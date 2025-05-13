@@ -176,6 +176,88 @@ app.post('/api/bookmarks/ai-enrich', async (req, res) => {
   }
 });
 
+// AI categorization endpoint
+app.post('/api/bookmarks/ai-categorize', async (req, res) => {
+  try {
+    const { url, title, description } = req.body;
+    
+    // Use a free LLM API (like HuggingFace's free tier) to analyze the content
+    const response = await fetch('https://api-inference.huggingface.co/models/facebook/bart-large-mnli', {
+      method: 'POST',
+      headers: {
+        'Authorization': `Bearer ${process.env.HUGGINGFACE_API_KEY}`,
+        'Content-Type': 'application/json'
+      },
+      body: JSON.stringify({
+        inputs: `${title} ${description || ''}`,
+        parameters: {
+          candidate_labels: [
+            'Technology', 'Science', 'Business', 'Entertainment', 
+            'Education', 'Health', 'Sports', 'News', 'Shopping',
+            'Social Media', 'Development', 'Design', 'Research'
+          ]
+        }
+      })
+    });
+
+    if (!response.ok) {
+      throw new Error('Failed to get AI categorization');
+    }
+
+    const result = await response.json();
+    
+    // Get the top 3 categories and their confidence scores
+    const categories = result.labels
+      .map((label, index) => ({
+        name: label,
+        confidence: result.scores[index]
+      }))
+      .sort((a, b) => b.confidence - a.confidence)
+      .slice(0, 3);
+
+    // Generate relevant tags based on the content
+    const tagsResponse = await fetch('https://api-inference.huggingface.co/models/facebook/bart-large-mnli', {
+      method: 'POST',
+      headers: {
+        'Authorization': `Bearer ${process.env.HUGGINGFACE_API_KEY}`,
+        'Content-Type': 'application/json'
+      },
+      body: JSON.stringify({
+        inputs: `${title} ${description || ''}`,
+        parameters: {
+          candidate_labels: [
+            'tutorial', 'article', 'video', 'documentation', 'blog',
+            'news', 'guide', 'reference', 'tool', 'resource'
+          ]
+        }
+      })
+    });
+
+    if (!tagsResponse.ok) {
+      throw new Error('Failed to get tag suggestions');
+    }
+
+    const tagsResult = await tagsResponse.json();
+    const tags = tagsResult.labels
+      .map((label, index) => ({
+        name: label,
+        confidence: tagsResult.scores[index]
+      }))
+      .filter(tag => tag.confidence > 0.5)
+      .map(tag => tag.name);
+
+    res.json({
+      suggestedCategory: categories[0].name,
+      categoryConfidence: categories[0].confidence,
+      alternativeCategories: categories.slice(1),
+      suggestedTags: tags
+    });
+  } catch (error) {
+    console.error('Error in AI categorization:', error);
+    res.status(500).json({ error: 'Failed to categorize bookmark' });
+  }
+});
+
 // GET all bookmarks
 app.get('/api/bookmarks', async (req, res) => {
   try {

@@ -40,9 +40,12 @@ const formSchema = z.object({
 });
 
 const AddBookmarkForm = () => {
-  const { addBookmark } = useBookmarkContext();
+  const { addBookmark, state } = useBookmarkContext();
   const [open, setOpen] = useState(false);
   
+  // Get unique categories from bookmarks
+  const categories = Array.from(new Set(state.bookmarks.map(b => b.category).filter(Boolean)));
+
   const form = useForm({
     resolver: zodResolver(formSchema),
     defaultValues: {
@@ -150,12 +153,12 @@ const AddBookmarkForm = () => {
                       </SelectTrigger>
                     </FormControl>
                     <SelectContent>
-                      <SelectItem value="work">Work</SelectItem>
-                      <SelectItem value="personal">Personal</SelectItem>
-                      <SelectItem value="research">Research</SelectItem>
-                      <SelectItem value="entertainment">Entertainment</SelectItem>
-                      <SelectItem value="development">Development</SelectItem>
-                      <SelectItem value="design">Design</SelectItem>
+                      {categories.length === 0 && (
+                        <SelectItem value="other">Other</SelectItem>
+                      )}
+                      {categories.map(cat => (
+                        <SelectItem key={cat} value={cat}>{cat.charAt(0).toUpperCase() + cat.slice(1)}</SelectItem>
+                      ))}
                       <SelectItem value="other">Other</SelectItem>
                     </SelectContent>
                   </Select>
