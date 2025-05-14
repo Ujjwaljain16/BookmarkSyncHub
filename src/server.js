@@ -11,7 +11,9 @@ import natural from 'natural';
 dotenv.config();
 
 const __dirname = dirname(fileURLToPath(import.meta.url));
-const DATA_FILE = join(__dirname, 'bookmarks.json');
+const DATA_FILE = process.env.NODE_ENV === 'production' 
+  ? '/tmp/bookmarks.json'  // Use /tmp directory on Render
+  : join(__dirname, 'bookmarks.json');
 
 const app = express();
 const port = (typeof process !== 'undefined' && process.env.PORT) || 3000;
@@ -29,7 +31,8 @@ const tfidf = new TfIdf();
 // CORS configuration
 const allowedOrigins = [
   'http://localhost:5173',
-  'https://bookmarkhub.onrender.com'
+  'https://bookmarkhub.onrender.com',
+  'chrome-extension://*'  // Allow all Chrome extensions
 ];
 
 app.use(cors({
@@ -37,7 +40,13 @@ app.use(cors({
     // Allow requests with no origin (like mobile apps or curl requests)
     if (!origin) return callback(null, true);
     
+    // Allow Chrome extensions
+    if (origin.startsWith('chrome-extension://')) {
+      return callback(null, true);
+    }
+    
     if (allowedOrigins.indexOf(origin) === -1) {
+      console.warn('CORS blocked request from origin:', origin);
       const msg = 'The CORS policy for this site does not allow access from the specified Origin.';
       return callback(new Error(msg), false);
     }
@@ -45,7 +54,7 @@ app.use(cors({
   },
   credentials: true,
   methods: ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS'],
-  allowedHeaders: ['Content-Type', 'Authorization'],
+  allowedHeaders: ['Content-Type', 'Authorization', 'Accept'],
   exposedHeaders: ['Content-Range', 'X-Content-Range']
 }));
 
@@ -66,21 +75,85 @@ app.use(express.json());
 // Helper function to read bookmarks from file
 async function readBookmarks() {
   try {
-    const data = await fs.readFile(DATA_FILE, 'utf8');
-    return JSON.parse(data);
-  } catch (error) {
-    // If file doesn't exist or is empty, return empty array
-    if (error.code === 'ENOENT') {
-      await fs.writeFile(DATA_FILE, '[]', 'utf8');
-      return [];
+    // Ensure directory exists in production
+    if (process.env.NODE_ENV === 'production') {
+      try {
+        await fs.mkdir('/tmp', { recursive: true });
+      } catch (mkdirError) {
+        console.error('Error creating /tmp directory:', mkdirError);
+        // Continue anyway as the directory might already exist
+      }
     }
+
+    try {
+      const data = await fs.readFile(DATA_FILE, 'utf8');
+      return JSON.parse(data);
+    } catch (readError) {
+      console.error('Error reading bookmarks file:', readError);
+      
+      // If file doesn't exist or is empty, create it
+      if (readError.code === 'ENOENT') {
+        try {
+          await fs.writeFile(DATA_FILE, '[]', 'utf8');
+          return [];
+        } catch (writeError) {
+          console.error('Error creating bookmarks file:', writeError);
+          throw new Error(`Failed to initialize bookmarks storage: ${writeError.message}`);
+        }
+      }
+      
+      // If file exists but is invalid JSON, try to recover
+      if (readError instanceof SyntaxError) {
+        console.error('Invalid JSON in bookmarks file, attempting to recover');
+        try {
+          await fs.writeFile(DATA_FILE, '[]', 'utf8');
+          return [];
+        } catch (writeError) {
+          console.error('Error recovering bookmarks file:', writeError);
+          throw new Error(`Failed to recover bookmarks storage: ${writeError.message}`);
+        }
+      }
+      
+      throw new Error(`Failed to read bookmarks: ${readError.message}`);
+    }
+  } catch (error) {
+    console.error('Critical error in readBookmarks:', error);
     throw error;
   }
 }
 
 // Helper function to write bookmarks to file
 async function writeBookmarks(bookmarks) {
-  await fs.writeFile(DATA_FILE, JSON.stringify(bookmarks, null, 2), 'utf8');
+  try {
+    // Ensure directory exists in production
+    if (process.env.NODE_ENV === 'production') {
+      try {
+        await fs.mkdir('/tmp', { recursive: true });
+      } catch (mkdirError) {
+        console.error('Error creating /tmp directory:', mkdirError);
+        // Continue anyway as the directory might already exist
+      }
+    }
+
+    // First try to read the existing file to ensure we have access
+    try {
+      await fs.access(DATA_FILE, fs.constants.R_OK | fs.constants.W_OK);
+    } catch (accessError) {
+      console.error('Error accessing bookmarks file:', accessError);
+      throw new Error(`No access to bookmarks file: ${accessError.message}`);
+    }
+
+    // Write the file with proper error handling
+    try {
+      await fs.writeFile(DATA_FILE, JSON.stringify(bookmarks, null, 2), 'utf8');
+    } catch (writeError) {
+      console.error('Error writing bookmarks file:', writeError);
+      throw new Error(`Failed to save bookmarks: ${writeError.message}`);
+    }
+  } catch (error) {
+    console.error('Critical error in writeBookmarks:', error);
+    throw error;
+  }
 }
 
 // Helper function to normalize URL
@@ -358,6 +431,20 @@ app.get('/api/bookmarks/url', async (req, res) => {
 // POST new bookmark
 app.post('/api/bookmarks', async (req, res) => {
   try {
+    if (!req.body || !req.body.url) {
+      return res.status(400).json({ 
+        error: 'Invalid request',
+        message: 'URL is required'
+      });
+    }
+
+    console.log('Received bookmark data:', {
+      url: req.body.url,
+      title: req.body.title,
+      category: req.body.category,
+      source: req.body.source
+    });
+
     const bookmarks = await readBookmarks();
     
     // Check for duplicates by URL
@@ -403,7 +490,12 @@ app.post('/api/bookmarks', async (req, res) => {
     }
   } catch (error) {
     console.error('Error adding bookmark:', error);
-    res.status(500).json({ error: 'Failed to add bookmark' });
+    res.status(500).json({ 
+      error: 'Failed to add bookmark',
+      message: error.message || 'Internal server error',
+      details: process.env.NODE_ENV === 'development' ? error.stack : undefined,
+      code: error.code // Include error code for file system errors
+    });
   }
 });
 
@@ -738,8 +830,18 @@ if (process.env.NODE_ENV === 'production') {
 
 // Error handling middleware
 app.use((err, req, res, next) => {
-  console.error(err.stack);
-  res.status(500).json({ error: 'Something broke!' });
+  console.error('Server error:', {
+    message: err.message,
+    stack: err.stack,
+    code: err.code
+  });
+  
+  res.status(500).json({ 
+    error: 'Internal server error',
+    message: err.message || 'Something went wrong',
+    code: err.code, // Include error code for file system errors
+    details: process.env.NODE_ENV === 'development' ? err.stack : undefined
+  });
 });
 
 // Start the server
