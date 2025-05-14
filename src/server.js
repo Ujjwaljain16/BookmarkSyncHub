@@ -7,13 +7,17 @@ import { dirname, join } from 'path';
 import axios from 'axios';
 import dotenv from 'dotenv';
 import natural from 'natural';
+import path from 'path';
 
 dotenv.config();
 
-const __dirname = dirname(fileURLToPath(import.meta.url));
+const __filename = fileURLToPath(import.meta.url);
+const __dirname = path.dirname(__filename);
+
+// Use /tmp directory in production, local directory in development
 const DATA_FILE = process.env.NODE_ENV === 'production' 
-  ? '/tmp/bookmarks.json'  // Use /tmp directory on Render
-  : join(__dirname, 'bookmarks.json');
+  ? '/tmp/bookmarks.json'
+  : path.join(__dirname, 'bookmarks.json');
 
 const app = express();
 const port = (typeof process !== 'undefined' && process.env.PORT) || 3000;
@@ -94,86 +98,60 @@ app.use((req, res, next) => {
 
 app.use(express.json());
 
-// Helper function to read bookmarks from file
+// Ensure directory exists and create initial file if needed
+async function ensureDataFile() {
+  if (process.env.NODE_ENV === 'production') {
+    try {
+      await fs.access('/tmp');
+    } catch (error) {
+      if (error.code === 'ENOENT') {
+        await fs.mkdir('/tmp', { recursive: true });
+      } else {
+        throw error;
+      }
+    }
+  }
+
+  try {
+    await fs.access(DATA_FILE);
+  } catch (error) {
+    if (error.code === 'ENOENT') {
+      await fs.writeFile(DATA_FILE, JSON.stringify({ bookmarks: [] }), 'utf8');
+    } else {
+      throw error;
+    }
+  }
+}
+
+// Initialize data file on server start
+ensureDataFile().catch(error => {
+  console.error('Failed to initialize data file:', error);
+  process.exit(1);
+});
+
+// Helper function to read bookmarks
 async function readBookmarks() {
   try {
-    // Ensure directory exists in production
-    if (process.env.NODE_ENV === 'production') {
-      try {
-        await fs.mkdir('/tmp', { recursive: true });
-      } catch (mkdirError) {
-        console.error('Error creating /tmp directory:', mkdirError);
-        // Continue anyway as the directory might already exist
-      }
-    }
-
-    try {
-      const data = await fs.readFile(DATA_FILE, 'utf8');
-      return JSON.parse(data);
-    } catch (readError) {
-      console.error('Error reading bookmarks file:', readError);
-      
-      // If file doesn't exist or is empty, create it
-      if (readError.code === 'ENOENT') {
-        try {
-          await fs.writeFile(DATA_FILE, '[]', 'utf8');
-          return [];
-        } catch (writeError) {
-          console.error('Error creating bookmarks file:', writeError);
-          throw new Error(`Failed to initialize bookmarks storage: ${writeError.message}`);
-        }
-      }
-      
-      // If file exists but is invalid JSON, try to recover
-      if (readError instanceof SyntaxError) {
-        console.error('Invalid JSON in bookmarks file, attempting to recover');
-        try {
-          await fs.writeFile(DATA_FILE, '[]', 'utf8');
-          return [];
-        } catch (writeError) {
-          console.error('Error recovering bookmarks file:', writeError);
-          throw new Error(`Failed to recover bookmarks storage: ${writeError.message}`);
-        }
-      }
-      
-      throw new Error(`Failed to read bookmarks: ${readError.message}`);
-    }
+    const data = await fs.readFile(DATA_FILE, 'utf8');
+    return JSON.parse(data);
   } catch (error) {
-    console.error('Critical error in readBookmarks:', error);
+    if (error.code === 'ENOENT') {
+      // If file doesn't exist, create it with empty bookmarks array
+      const initialData = { bookmarks: [] };
+      await fs.writeFile(DATA_FILE, JSON.stringify(initialData), 'utf8');
+      return initialData;
+    }
+    console.error('Error reading bookmarks file:', error);
     throw error;
   }
 }
 
-// Helper function to write bookmarks to file
-async function writeBookmarks(bookmarks) {
+// Helper function to write bookmarks
+async function writeBookmarks(data) {
   try {
-    // Ensure directory exists in production
-    if (process.env.NODE_ENV === 'production') {
-      try {
-        await fs.mkdir('/tmp', { recursive: true });
-      } catch (mkdirError) {
-        console.error('Error creating /tmp directory:', mkdirError);
-        // Continue anyway as the directory might already exist
-      }
-    }
-
-    // First try to read the existing file to ensure we have access
-    try {
-      await fs.access(DATA_FILE, fs.constants.R_OK | fs.constants.W_OK);
-    } catch (accessError) {
-      console.error('Error accessing bookmarks file:', accessError);
-      throw new Error(`No access to bookmarks file: ${accessError.message}`);
-    }
-
-    // Write the file with proper error handling
-    try {
-      await fs.writeFile(DATA_FILE, JSON.stringify(bookmarks, null, 2), 'utf8');
-    } catch (writeError) {
-      console.error('Error writing bookmarks file:', writeError);
-      throw new Error(`Failed to save bookmarks: ${writeError.message}`);
-    }
+    await fs.writeFile(DATA_FILE, JSON.stringify(data, null, 2), 'utf8');
   } catch (error) {
-    console.error('Critical error in writeBookmarks:', error);
+    console.error('Error writing bookmarks file:', error);
     throw error;
   }
 }
