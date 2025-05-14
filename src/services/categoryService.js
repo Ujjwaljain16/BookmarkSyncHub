@@ -1,4 +1,5 @@
 import { fetchBookmarks } from './bookmarkService';
+import config from '../config';
 
 // Get all unique categories from existing bookmarks
 export const getCategories = async () => {
@@ -21,7 +22,7 @@ export const addCategory = async (categoryName) => {
 // Get category suggestions based on bookmark content
 export const suggestCategory = async (bookmark) => {
   try {
-    const response = await fetch('http://localhost:3000/api/bookmarks/ai-categorize', {
+    const response = await fetch(`${config.apiBaseUrl}/bookmarks/ai-categorize`, {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify(bookmark)

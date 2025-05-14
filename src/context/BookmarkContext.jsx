@@ -1,7 +1,8 @@
 import React, { createContext, useContext, useReducer, useEffect } from 'react';
 import { toast } from 'sonner';
+import config from '../config';
 
-const API_URL = 'http://localhost:3000/api/bookmarks';
+const API_URL = `${config.apiBaseUrl}/bookmarks`;
 
 const initialState = {
   bookmarks: [],

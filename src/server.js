@@ -45,7 +45,8 @@ app.use(cors({
   },
   credentials: true,
   methods: ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS'],
-  allowedHeaders: ['Content-Type', 'Authorization']
+  allowedHeaders: ['Content-Type', 'Authorization'],
+  exposedHeaders: ['Content-Range', 'X-Content-Range']
 }));
 
 // Security headers
@@ -54,6 +55,9 @@ app.use((req, res, next) => {
   res.setHeader('X-Frame-Options', 'DENY');
   res.setHeader('X-XSS-Protection', '1; mode=block');
   res.setHeader('Strict-Transport-Security', 'max-age=31536000; includeSubDomains');
+  res.setHeader('Access-Control-Allow-Origin', process.env.NODE_ENV === 'production' 
+    ? 'https://bookmarkhub.onrender.com' 
+    : 'http://localhost:5173');
   next();
 });
 
