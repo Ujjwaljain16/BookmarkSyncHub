@@ -560,7 +560,8 @@ app.delete('/api/bookmarks/url/:encodedUrl', async (req, res) => {
 // Bulk import bookmarks
 app.post('/api/bookmarks/import', async (req, res) => {
   try {
-    const existingBookmarks = await readBookmarks();
+    const data = await readBookmarks();
+    const existingBookmarks = data.bookmarks || [];
     const importedBookmarks = [];
     const updatedBookmarks = [];
     const skippedBookmarks = [];
@@ -641,7 +642,7 @@ app.post('/api/bookmarks/import', async (req, res) => {
     }
     
     // Save the updated bookmarks
-    await writeBookmarks(existingBookmarks);
+    await writeBookmarks({ bookmarks: existingBookmarks });
     
     res.status(201).json({ 
       added: importedBookmarks.length,
