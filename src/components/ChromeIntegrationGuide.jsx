@@ -15,8 +15,8 @@ const ChromeIntegrationGuide = () => {
   const handleDownload = () => {
     // Create a link element and trigger download
     const link = document.createElement('a');
-    link.href = '/EXTENSION.crx'; // The file is in the public folder
-    link.download = 'EXTENSION.crx';
+    link.href = '/BookmarkSyncHub.zip'; // The file is in the public folder
+    link.download = 'BookmarkSyncHub.zip';
     document.body.appendChild(link);
     link.click();
     document.body.removeChild(link);
@@ -47,7 +47,7 @@ const ChromeIntegrationGuide = () => {
             <InstallationStep
               number={1}
               title="Download the Extension"
-              description="Download the Chrome extension package (.crx file) from our website."
+              description="Download the Chrome extension package (.zip file) from our website."
               icon={<Download className="h-5 w-5" />}
             >
               <Button 
@@ -62,20 +62,27 @@ const ChromeIntegrationGuide = () => {
 
             <InstallationStep
               number={2}
-              title="Install in Chrome"
-              description="Open Chrome and navigate to chrome://extensions. Enable 'Developer mode' and click 'Load unpacked'. Select the downloaded extension folder."
+              title="Extract the ZIP File"
+              description="Extract the downloaded BookmarkSyncHub.zip file to a folder on your computer. Remember where you extracted it as you'll need this location in the next step."
               icon={<Chrome className="h-5 w-5" />}
             />
 
             <InstallationStep
               number={3}
-              title="Connect to Your Account"
-              description="Click on the extension icon in your browser toolbar. Log in with your Bookmark Hub account credentials to start syncing."
-              icon={<Info className="h-5 w-5" />}
+              title="Install in Chrome"
+              description="Open Chrome and go to chrome://extensions. Enable 'Developer mode' in the top right corner, then click 'Load unpacked' and select the extracted folder."
+              icon={<Chrome className="h-5 w-5" />}
             />
 
             <InstallationStep
               number={4}
+              title="Connect to Your Account"
+              description="Click on the extension icon in your browser toolbar. The extension will automatically connect to Bookmark Hub. If you need to use a different server, click the settings link to configure it."
+              icon={<Info className="h-5 w-5" />}
+            />
+
+            <InstallationStep
+              number={5}
               title="Enable Auto-Sync (Optional)"
               description="To automatically sync bookmarks when you click Chrome's star icon, go to the extension settings and enable the 'Auto-sync Chrome bookmarks' option."
               icon={<BookmarkIcon className="h-5 w-5" />}
