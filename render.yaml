@@ -12,4 +12,5 @@ services:
       - key: FRONTEND_URL
         value: https://bookmarkhub.onrender.com
       - key: HUGGINGFACE_API_KEY
-        sync: false 
+        sync: false
+    nodeVersion: 18.17.0 
