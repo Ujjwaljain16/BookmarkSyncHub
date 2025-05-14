@@ -30,6 +30,7 @@ import { Button } from '@/components/ui/button';
 import { Plus } from 'lucide-react';
 import { useBookmarkContext } from '@/context/BookmarkContext';
 import { toast } from 'sonner';
+import { Dialog as Modal, DialogContent as ModalContent, DialogHeader as ModalHeader, DialogTitle as ModalTitle } from '@/components/ui/dialog';
 
 const formSchema = z.object({
   url: z.string().url({ message: 'Please enter a valid URL' }),
@@ -42,9 +43,15 @@ const formSchema = z.object({
 const AddBookmarkForm = () => {
   const { addBookmark, state } = useBookmarkContext();
   const [open, setOpen] = useState(false);
-  
-  // Get unique categories from bookmarks
-  const categories = Array.from(new Set(state.bookmarks.map(b => b.category).filter(Boolean)));
+  const [categoryModalOpen, setCategoryModalOpen] = useState(false);
+  const [newCategory, setNewCategory] = useState('');
+  // Use local categories state for instant update
+  const [categories, setCategories] = useState(() => Array.from(new Set(state.bookmarks.map(b => b.category).filter(Boolean))));
+
+  // Update local categories if bookmarks change
+  React.useEffect(() => {
+    setCategories(Array.from(new Set(state.bookmarks.map(b => b.category).filter(Boolean))));
+  }, [state.bookmarks]);
 
   const form = useForm({
     resolver: zodResolver(formSchema),
@@ -82,7 +89,19 @@ const AddBookmarkForm = () => {
       toast.error('Failed to save bookmark');
     }
   };
-  
+
+  // Add new category handler
+  const handleAddCategory = (e) => {
+    e.preventDefault();
+    if (!newCategory.trim()) return;
+    if (!categories.includes(newCategory.trim())) {
+      setCategories(prev => [...prev, newCategory.trim()]);
+    }
+    form.setValue('category', newCategory.trim());
+    setNewCategory('');
+    setCategoryModalOpen(false);
+  };
+
   return (
     <Dialog open={open} onOpenChange={setOpen}>
       <DialogTrigger asChild>
@@ -162,6 +181,9 @@ const AddBookmarkForm = () => {
                       <SelectItem value="other">Other</SelectItem>
                     </SelectContent>
                   </Select>
+                  <Button type="button" variant="outline" className="mt-2" onClick={() => setCategoryModalOpen(true)}>
+                    + New Category
+                  </Button>
                   <FormMessage />
                 </FormItem>
               )}
@@ -192,6 +214,31 @@ const AddBookmarkForm = () => {
           </form>
         </Form>
       </DialogContent>
+
+      {/* New Category Modal */}
+      <Modal open={categoryModalOpen} onOpenChange={setCategoryModalOpen}>
+        <ModalContent className="max-w-xs">
+          <ModalHeader>
+            <ModalTitle>New Category</ModalTitle>
+          </ModalHeader>
+          <form onSubmit={handleAddCategory} className="space-y-4">
+            <Input
+              autoFocus
+              placeholder="Category name"
+              value={newCategory}
+              onChange={e => setNewCategory(e.target.value)}
+            />
+            <div className="flex justify-end gap-2">
+              <Button type="button" variant="outline" onClick={() => setCategoryModalOpen(false)}>
+                Cancel
+              </Button>
+              <Button type="submit" className="bg-bookmark-primary hover:bg-bookmark-primary/90">
+                Add
+              </Button>
+            </div>
+          </form>
+        </ModalContent>
+      </Modal>
     </Dialog>
   );
 };

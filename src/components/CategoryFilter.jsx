@@ -3,26 +3,75 @@ import { Button } from '@/components/ui/button';
 import { Badge } from '@/components/ui/badge';
 import { useBookmarkContext } from '@/context/BookmarkContext';
 import PropTypes from 'prop-types';
-import { Bookmark, Tag, Hash } from 'lucide-react';
+import { Bookmark, Tag, Hash, Pencil, Trash2 } from 'lucide-react';
+import {
+  Dialog as Modal,
+  DialogContent as ModalContent,
+  DialogHeader as ModalHeader,
+  DialogTitle as ModalTitle,
+} from '@/components/ui/dialog';
+import { Input } from '@/components/ui/input';
 
 const iconMap = {
   other: <Tag className="h-4 w-4" />,
 };
 
 const CategoryFilter = () => {
-  const { state, setCategory } = useBookmarkContext();
+  const { state, setCategory, dispatch } = useBookmarkContext();
+  const [editModalOpen, setEditModalOpen] = React.useState(false);
+  const [deleteModalOpen, setDeleteModalOpen] = React.useState(false);
+  const [selectedCategory, setSelectedCategory] = React.useState('');
+  const [editCategoryName, setEditCategoryName] = React.useState('');
 
-  // Get unique categories from bookmarks
+// unique categories 
   const categories = Array.from(
     new Set(state.bookmarks.map(b => b.category).filter(Boolean))
   );
-
-  // Count bookmarks per category
   const getCount = (cat) => state.bookmarks.filter(b => b.category === cat).length;
+
+  // edit
+  const handleEditCategory = async (e) => {
+    e.preventDefault();
+    if (!editCategoryName.trim() || editCategoryName === selectedCategory) 
+      return;
+    try {
+      const res = await fetch('http://localhost:3000/api/bookmarks/update-category', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ oldCategory: selectedCategory, newCategory: editCategoryName.trim() })
+      });
+      if (!res.ok) throw new Error('Failed to update category');
+      const data = await res.json();
+      dispatch({ type: 'SET_BOOKMARKS', payload: data.bookmarks });
+      setEditModalOpen(false);
+      setEditCategoryName('');
+      setSelectedCategory('');
+    } catch (error) {
+      alert('Failed to update category');
+    }
+  };
+
+  // delet category 
+  const handleDeleteCategory = async (e) => {
+    e.preventDefault();
+    try {
+      const res = await fetch('http://localhost:3000/api/bookmarks/delete-category', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ category: selectedCategory })
+      });
+      if (!res.ok) throw new Error('Failed to delete category');
+      const data = await res.json();
+      dispatch({ type: 'SET_BOOKMARKS', payload: data.bookmarks });
+      setDeleteModalOpen(false);
+      setSelectedCategory('');
+    } catch (error) {
+      alert('Failed to delete category');
+    }
+  };
 
   return (
     <div className="flex flex-col space-y-1 w-full">
-      {/* All Bookmarks */}
       <Button
         key="all"
         variant={state.selectedCategory === 'all' ? 'default' : 'ghost'}
@@ -34,21 +83,78 @@ const CategoryFilter = () => {
           <span className="ml-2">All Bookmarks</span>
         </div>
       </Button>
-      {/* Dynamic categories */}
+      {/* dynamic categories */}
       {categories.map((cat) => (
-        <Button
-          key={cat}
-          variant={state.selectedCategory === cat ? 'default' : 'ghost'}
-          className={`justify-start ${state.selectedCategory === cat ? 'bg-bookmark-primary hover:bg-bookmark-primary/90' : ''}`}
-          onClick={() => setCategory(cat)}
-        >
-          <div className="flex items-center">
-            {iconMap[cat] || <Tag className="h-4 w-4" />}
-            <span className="ml-2">{cat.charAt(0).toUpperCase() + cat.slice(1)}</span>
-            <Badge variant="secondary" className="ml-auto">{getCount(cat)}</Badge>
-          </div>
-        </Button>
+        <div key={cat} className="flex items-center group">
+          <Button
+            variant={state.selectedCategory === cat ? 'default' : 'ghost'}
+            className={`flex-1 justify-start ${state.selectedCategory === cat ? 'bg-bookmark-primary hover:bg-bookmark-primary/90' : ''}`}
+            onClick={() => setCategory(cat)}
+          >
+            <div className="flex items-center">
+              {iconMap[cat] || <Tag className="h-4 w-4" />}
+              <span className="ml-2">{cat.charAt(0).toUpperCase() + cat.slice(1)}</span>
+              <Badge variant="secondary" className="ml-auto">{getCount(cat)}</Badge>
+            </div>
+          </Button>
+          {/* Edit/Delete icons */}
+          <button
+            className="ml-1 p-1 text-gray-400 hover:text-blue-600 invisible group-hover:visible"
+            title="Edit"
+            onClick={() => { setSelectedCategory(cat); setEditCategoryName(cat); setEditModalOpen(true); }}
+          >
+            <Pencil size={16} />
+          </button>
+          <button
+            className="ml-1 p-1 text-gray-400 hover:text-red-600 invisible group-hover:visible"
+            title="Delete"
+            onClick={() => { setSelectedCategory(cat); setDeleteModalOpen(true); }}
+          >
+            <Trash2 size={16} />
+          </button>
+        </div>
       ))}
+      {/* Edit Category Modal */}
+      <Modal open={editModalOpen} onOpenChange={setEditModalOpen}>
+        <ModalContent className="max-w-xs">
+          <ModalHeader>
+            <ModalTitle>Edit Category</ModalTitle>
+          </ModalHeader>
+          <form onSubmit={handleEditCategory} className="space-y-4">
+            <Input
+              autoFocus
+              placeholder="Category name"
+              value={editCategoryName}
+              onChange={e => setEditCategoryName(e.target.value)}
+            />
+            <div className="flex justify-end gap-2">
+              <Button type="button" variant="outline" onClick={() => setEditModalOpen(false)}>
+                Cancel
+              </Button>
+              <Button type="submit" className="bg-bookmark-primary hover:bg-bookmark-primary/90">
+                Save
+              </Button>
+            </div>
+          </form>
+        </ModalContent>
+      </Modal>
+      {/* Delete Category Modal */}
+      <Modal open={deleteModalOpen} onOpenChange={setDeleteModalOpen}>
+        <ModalContent className="max-w-xs">
+          <ModalHeader>
+            <ModalTitle>Delete Category</ModalTitle>
+          </ModalHeader>
+          <div className="mb-4">Are you sure you want to delete the category <b>{selectedCategory}</b>? All bookmarks in this category will be moved to <b>Other</b>.</div>
+          <div className="flex justify-end gap-2">
+            <Button type="button" variant="outline" onClick={() => setDeleteModalOpen(false)}>
+              Cancel
+            </Button>
+            <Button type="button" className="bg-red-600 hover:bg-red-700 text-white" onClick={handleDeleteCategory}>
+              Delete
+            </Button>
+          </div>
+        </ModalContent>
+      </Modal>
       <div className="pt-4">
         <div className="text-sm font-medium mb-2 flex items-center">
           <Hash className="h-4 w-4 mr-2" />

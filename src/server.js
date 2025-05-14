@@ -23,9 +23,33 @@ const tfidf = new TfIdf();
 
 // Middleware
 app.use(cors({
-  origin: ['http://localhost:5173', 'chrome-extension://*'],
-  methods: ['GET', 'POST', 'DELETE'],
-  allowedHeaders: ['Content-Type']
+  origin: function(origin, callback) {
+    // Allow requests with no origin (like mobile apps, curl, etc)
+    if (!origin) return callback(null, true);
+    
+    const allowedOrigins = [
+      'http://localhost:5173',
+      'http://localhost:3000',
+      'chrome-extension://*'
+    ];
+    
+    // Check if the origin is allowed
+    const isAllowed = allowedOrigins.some(allowedOrigin => {
+      if (allowedOrigin.endsWith('*')) {
+        return origin.startsWith(allowedOrigin.slice(0, -1));
+      }
+      return origin === allowedOrigin;
+    });
+    
+    if (isAllowed) {
+      callback(null, true);
+    } else {
+      callback(new Error('Not allowed by CORS'));
+    }
+  },
+  methods: ['GET', 'POST', 'DELETE', 'PUT', 'OPTIONS'],
+  allowedHeaders: ['Content-Type', 'Accept', 'Authorization'],
+  credentials: true
 }));
 app.use(express.json());
 
@@ -59,6 +83,39 @@ function normalizeUrl(url) {
     console.error('Error normalizing URL:', url, e);
     return url.toLowerCase();
   }
+}
+
+// Helper function to normalize URL for comparison
+function normalizeUrlForComparison(url) {
+  try {
+    const urlObj = new URL(url);
+    // Only normalize scheme and host to lowercase, preserve path case
+    const normalizedUrl = new URL(url);
+    normalizedUrl.protocol = normalizedUrl.protocol.toLowerCase();
+    normalizedUrl.host = normalizedUrl.host.toLowerCase();
+    // Remove fragment
+    normalizedUrl.hash = '';
+    // Remove trailing slash
+    const path = normalizedUrl.pathname.replace(/\/$/, '');
+    normalizedUrl.pathname = path;
+    return normalizedUrl.toString();
+  } catch (e) {
+    console.error('Error normalizing URL for comparison:', url, e);
+    return url;
+  }
+}
+
+// Helper function to find bookmark by Chrome ID
+async function findBookmarkByChromeId(chromeId) {
+  const bookmarks = await readBookmarks();
+  return bookmarks.find(bookmark => bookmark.chromeBookmarkId === chromeId);
+}
+
+// Helper function to check for duplicate bookmarks
+async function findDuplicateBookmark(url) {
+  const bookmarks = await readBookmarks();
+  const normalizedUrl = normalizeUrlForComparison(url);
+  return bookmarks.find(bookmark => normalizeUrlForComparison(bookmark.url) === normalizedUrl);
 }
 
 // AI-powered bookmark analysis
@@ -502,6 +559,168 @@ app.post('/api/bookmarks/import', async (req, res) => {
     console.error('Error importing bookmarks:', error);
     res.status(500).json({ error: 'Failed to import bookmarks' });
   }
+});
+
+// Bulk update category for all bookmarks
+app.post('/api/bookmarks/update-category', async (req, res) => {
+  try {
+    const { oldCategory, newCategory } = req.body;
+    if (!oldCategory || !newCategory) {
+      return res.status(400).json({ error: 'oldCategory and newCategory are required' });
+    }
+    const bookmarks = await readBookmarks();
+    const updated = bookmarks.map(b =>
+      b.category === oldCategory ? { ...b, category: newCategory } : b
+    );
+    await writeBookmarks(updated);
+    res.status(200).json({ message: 'Category updated', bookmarks: updated });
+  } catch (error) {
+    console.error('Error updating category:', error);
+    res.status(500).json({ error: 'Failed to update category' });
+  }
+});
+
+// Bulk move category to 'other' (delete category)
+app.post('/api/bookmarks/delete-category', async (req, res) => {
+  try {
+    const { category } = req.body;
+    if (!category) {
+      return res.status(400).json({ error: 'category is required' });
+    }
+    const bookmarks = await readBookmarks();
+    const updated = bookmarks.map(b =>
+      b.category === category ? { ...b, category: 'other' } : b
+    );
+    await writeBookmarks(updated);
+    res.status(200).json({ message: 'Category deleted', bookmarks: updated });
+  } catch (error) {
+    console.error('Error deleting category:', error);
+    res.status(500).json({ error: 'Failed to delete category' });
+  }
+});
+
+// Check for duplicate bookmark
+app.post('/api/bookmarks/check-duplicate', async (req, res) => {
+  try {
+    const { url } = req.body;
+    
+    if (!url) {
+      return res.status(400).json({ 
+        error: 'Invalid request',
+        message: 'URL is required'
+      });
+    }
+
+    const normalizedUrl = normalizeUrlForComparison(url);
+    const existingBookmark = await findDuplicateBookmark(normalizedUrl);
+    
+    res.json({
+      isDuplicate: !!existingBookmark,
+      existingBookmark: existingBookmark || null
+    });
+  } catch (error) {
+    console.error('Error checking duplicate:', error);
+    res.status(500).json({ 
+      error: 'Failed to check for duplicate',
+      message: error.message
+    });
+  }
+});
+
+// Find bookmark by Chrome ID
+app.get('/api/bookmarks/find-by-chrome-id/:chromeId', async (req, res) => {
+  try {
+    const { chromeId } = req.params;
+    
+    if (!chromeId) {
+      return res.status(400).json({ 
+        error: 'Invalid request',
+        message: 'Chrome ID is required'
+      });
+    }
+
+    const bookmark = await findBookmarkByChromeId(chromeId);
+    
+    if (!bookmark) {
+      return res.status(404).json({ 
+        error: 'Bookmark not found',
+        message: 'No bookmark found with the specified Chrome ID'
+      });
+    }
+
+    res.json(bookmark);
+  } catch (error) {
+    console.error('Error finding bookmark by Chrome ID:', error);
+    res.status(500).json({ 
+      error: 'Failed to find bookmark',
+      message: error.message
+    });
+  }
+});
+
+// Update bookmark by ID
+app.put('/api/bookmarks/:id', async (req, res) => {
+  try {
+    const { id } = req.params;
+    const updates = req.body;
+    
+    if (!id) {
+      return res.status(400).json({ 
+        error: 'Invalid request',
+        message: 'Bookmark ID is required'
+      });
+    }
+
+    const bookmarks = await readBookmarks();
+    const bookmarkIndex = bookmarks.findIndex(b => b.id === id);
+    
+    if (bookmarkIndex === -1) {
+      return res.status(404).json({ 
+        error: 'Bookmark not found',
+        message: 'No bookmark found with the specified ID'
+      });
+    }
+
+    // If URL is being updated, check for duplicates
+    if (updates.url) {
+      const normalizedUrl = normalizeUrlForComparison(updates.url);
+      const existingBookmark = await findDuplicateBookmark(normalizedUrl);
+      
+      if (existingBookmark && existingBookmark.id !== id) {
+        return res.status(409).json({ 
+          error: 'Duplicate bookmark',
+          message: 'A bookmark with this URL already exists',
+          existingBookmark
+        });
+      }
+    }
+
+    const updatedBookmark = {
+      ...bookmarks[bookmarkIndex],
+      ...updates,
+      updatedAt: new Date().toISOString()
+    };
+
+    bookmarks[bookmarkIndex] = updatedBookmark;
+    await writeBookmarks(bookmarks);
+
+    res.json({
+      message: 'Bookmark updated successfully',
+      bookmark: updatedBookmark
+    });
+  } catch (error) {
+    console.error('Error updating bookmark:', error);
+    res.status(500).json({ 
+      error: 'Failed to update bookmark',
+      message: error.message
+    });
+  }
+});
+
+// Serve the Chrome extension .crx file with the correct header
+app.get('/hello.crx', (req, res) => {
+  res.setHeader('Content-Type', 'application/x-chrome-extension');
+  res.sendFile(join(__dirname, '../public/hello.crx'));
 });
 
 // Error handling middleware

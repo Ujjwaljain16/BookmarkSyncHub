@@ -25,5 +25,4 @@ const Index = () => {
     </BookmarkProvider>
   );
 };
-
 export default Index;

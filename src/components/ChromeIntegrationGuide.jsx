@@ -12,6 +12,16 @@ import { AlertCircle, Chrome, Download, Info, BookmarkIcon } from 'lucide-react'
 import { Alert, AlertDescription, AlertTitle } from '@/components/ui/alert';
 
 const ChromeIntegrationGuide = () => {
+  const handleDownload = () => {
+    // Create a link element and trigger download
+    const link = document.createElement('a');
+    link.href = '/EXTENSION.crx'; // The file is in the public folder
+    link.download = 'EXTENSION.crx';
+    document.body.appendChild(link);
+    link.click();
+    document.body.removeChild(link);
+  };
+
   return (
     <Card className="w-full">
       <CardHeader>
@@ -27,9 +37,9 @@ const ChromeIntegrationGuide = () => {
         <div className="space-y-4">
           <Alert>
             <AlertCircle className="h-4 w-4" />
-            <AlertTitle>Extension Coming Soon</AlertTitle>
+            <AlertTitle>Installation Required</AlertTitle>
             <AlertDescription>
-              Our Chrome extension is currently in development. Follow these steps to test the integration when ready.
+              Follow these steps to install and set up the Chrome extension for Bookmark Hub.
             </AlertDescription>
           </Alert>
 
@@ -37,12 +47,16 @@ const ChromeIntegrationGuide = () => {
             <InstallationStep
               number={1}
               title="Download the Extension"
-              description="Download the Chrome extension package from our website."
+              description="Download the Chrome extension package (.crx file) from our website."
               icon={<Download className="h-5 w-5" />}
             >
-              <Button variant="outline" disabled className="mt-2">
+              <Button 
+                variant="outline" 
+                className="mt-2"
+                onClick={handleDownload}
+              >
                 <Download className="mr-2 h-4 w-4" />
-                Download Extension (Coming Soon)
+                Download Extension
               </Button>
             </InstallationStep>
 
@@ -70,9 +84,9 @@ const ChromeIntegrationGuide = () => {
         </div>
       </CardContent>
       <CardFooter className="flex justify-between border-t pt-4">
-        <Button variant="outline">
+        <Button variant="outline" onClick={handleDownload}>
           <Chrome className="mr-2 h-4 w-4" />
-          Install Extension (Soon)
+          Download Extension
         </Button>
       </CardFooter>
     </Card>

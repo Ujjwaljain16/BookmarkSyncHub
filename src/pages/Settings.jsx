@@ -150,5 +150,4 @@ const Settings = () => {
     </BookmarkProvider>
   );
 };
-
 export default Settings;

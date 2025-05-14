@@ -8,10 +8,7 @@ const NotFound = () => {
   const location = useLocation();
 
   useEffect(() => {
-    console.error(
-      "404 Error: User attempted to access non-existent route:",
-      location.pathname
-    );
+    document.title = "404 | Bookmarks Hub";
   }, [location.pathname]);
 
   return (
@@ -38,5 +35,4 @@ const NotFound = () => {
     </div>
   );
 };
-
 export default NotFound;

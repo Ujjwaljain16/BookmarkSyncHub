@@ -1,14 +1,8 @@
-// src/services/bookmarkService.js
-
 import fetch from 'node-fetch';
 import { load as parseHTML } from 'cheerio';
 import { suggestCategory } from './categoryService';
 
-// simulate small delays for UI feedback
 const delay = ms => new Promise(res => setTimeout(res, ms));
-
-// ── Storage (no changes) ──────────────────────────────────────────────────
-
 export const fetchBookmarks = async () => {
   await delay(1000);
   const data = localStorage.getItem('bookmarks');
@@ -45,15 +39,13 @@ export const removeBookmark = async (id) => {
   localStorage.setItem('bookmarks', JSON.stringify(filtered));
 };
 
-// ── Fetch & scrape helpers with console.logs ──────────────────────────────
 
+// favicon
 async function fetchBestFavicon(url) {
   try {
     const resp = await fetch(url);
     const html = await resp.text();
     const $    = parseHTML(html);
-
-    // collect all <link rel="icon"> and <link rel="shortcut icon">
     const icons = $('link[rel~="icon"], link[rel="shortcut icon"]')
       .map((_, el) => {
         const href  = $(el).attr('href');
@@ -100,20 +92,19 @@ async function fetchOgImage(url) {
   return null;
 }
 
-// ── Main metadata enrichment ───────────────────────────────────────────────
+//metadata
 
 async function enrichBookmarkMetadata(bookmark) {
-  await delay(200);  // small pause
+  await delay(200);  
 
   console.log('[METADATA] Processing URL:', bookmark.url);
 
-  // 1) Favicon
+//favicon
   const favicon  = await fetchBestFavicon(bookmark.url);
-
-  // 2) OG image
+//og img
   let thumbnail  = await fetchOgImage(bookmark.url);
 
-  // 3) Fallback to WordPress MShots if no OG
+//wordpress
   if (!thumbnail) {
     thumbnail = `https://s.wordpress.com/mshots/v1/${encodeURIComponent(bookmark.url)}?w=1000`;
     console.log('[THUMBNAIL] Falling back to MShots:', thumbnail);
@@ -131,7 +122,7 @@ async function enrichBookmarkMetadata(bookmark) {
   };
 }
 
-// ── Entry point used by your extension ────────────────────────────────────
+
 
 export const processBookmarkFromExtension = async ({ title, url, description = '', category = 'other' }) => {
   try {
@@ -147,7 +138,7 @@ export const processBookmarkFromExtension = async ({ title, url, description = '
       }
     }
 
-    const bookmarkData = {
+    let bookmarkData = {
       url,
       title,
       description,
@@ -156,6 +147,9 @@ export const processBookmarkFromExtension = async ({ title, url, description = '
       source: 'extension',
       createdAt: new Date().toISOString()
     };
+
+    // Enrich bookmark metadata
+    bookmarkData = await enrichBookmarkMetadata(bookmarkData);
 
     // Save the bookmark
     const saved = await addBookmark(bookmarkData);
