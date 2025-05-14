@@ -11,6 +11,7 @@ import {
   DialogTitle as ModalTitle,
 } from '@/components/ui/dialog';
 import { Input } from '@/components/ui/input';
+import config from '@/config';
 
 const iconMap = {
   other: <Tag className="h-4 w-4" />,
@@ -55,7 +56,7 @@ const CategoryFilter = () => {
   const handleDeleteCategory = async (e) => {
     e.preventDefault();
     try {
-      const res = await fetch('http://localhost:3000/api/bookmarks/delete-category', {
+      const res = await fetch(`${config.apiBaseUrl}/bookmarks/delete-category`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ category: selectedCategory })

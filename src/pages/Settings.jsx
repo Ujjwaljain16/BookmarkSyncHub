@@ -22,6 +22,7 @@ import {
   Settings as SettingsIcon 
 } from 'lucide-react';
 import { useToast } from "@/components/ui/use-toast";
+import config from '@/config';
 
 const Settings = () => {
   const [isDeleteDialogOpen, setIsDeleteDialogOpen] = useState(false);
@@ -29,7 +30,7 @@ const Settings = () => {
 
   const handleDeleteAllBookmarks = async () => {
     try {
-      const response = await fetch('http://localhost:3000/api/bookmarks/all', {
+      const response = await fetch(`${config.apiBaseUrl}/bookmarks/all`, {
         method: 'DELETE',
       });
 
