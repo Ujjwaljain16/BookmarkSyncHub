@@ -445,7 +445,8 @@ app.post('/api/bookmarks', async (req, res) => {
       source: req.body.source
     });
 
-    const bookmarks = await readBookmarks();
+    const data = await readBookmarks();
+    const bookmarks = data.bookmarks || [];
     
     // Check for duplicates by URL
     const normalizedUrl = normalizeUrl(req.body.url);
@@ -464,7 +465,7 @@ app.post('/api/bookmarks', async (req, res) => {
       };
       
       bookmarks[existingBookmarkIndex] = updatedBookmark;
-      await writeBookmarks(bookmarks);
+      await writeBookmarks({ bookmarks });
       
       res.status(200).json({ 
         bookmark: updatedBookmark,
@@ -481,7 +482,7 @@ app.post('/api/bookmarks', async (req, res) => {
       };
       
       bookmarks.push(bookmark);
-      await writeBookmarks(bookmarks);
+      await writeBookmarks({ bookmarks });
       
       res.status(201).json({ 
         bookmark,
