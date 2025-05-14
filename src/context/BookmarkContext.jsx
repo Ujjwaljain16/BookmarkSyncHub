@@ -107,14 +107,15 @@ export const BookmarkProvider = ({ children }) => {
           throw new Error(`HTTP error! Status: ${res.status}`);
         }
         
-        const bookmarks = await res.json();
+        const data = await res.json();
+        // Ensure we're using the bookmarks array from the response
+        const bookmarks = Array.isArray(data) ? data : (data.bookmarks || []);
         dispatch({ type: 'SET_BOOKMARKS', payload: bookmarks });
       } catch (error) {
         console.error('Failed to load bookmarks:', error);
         toast.error(`Failed to load bookmarks: ${error.message}`);
 
-        //mock data 
-      
+        // Load mock data if fetch fails
         if (error.message.includes('Failed to fetch')) {
           console.log('Loading mock bookmarks instead');
           dispatch({ type: 'SET_BOOKMARKS', payload: mockBookmarks });
