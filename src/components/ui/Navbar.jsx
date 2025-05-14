@@ -10,8 +10,6 @@ const Navbar = () => {
             <img src={Logo} alt="logo" style={{width: '48px', height: '48px', margin: '0 20px'}} />
         </Link>
         <Link to='/' className='underline'>Home</Link>
-        <Link to='/dashboard' className='underline'>Dashboard</Link>
-        
     </Stack>
   )
 }

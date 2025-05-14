@@ -16,6 +16,11 @@ const DATA_FILE = join(__dirname, 'bookmarks.json');
 const app = express();
 const port = (typeof process !== 'undefined' && process.env.PORT) || 3000;
 
+// Serve static files from the React app in production
+if (process.env.NODE_ENV === 'production') {
+  app.use(express.static(join(__dirname, 'dist')));
+}
+
 // Initialize natural language processing tools
 const tokenizer = new natural.WordTokenizer();
 const TfIdf = natural.TfIdf;
@@ -30,8 +35,8 @@ app.use(cors({
     const allowedOrigins = [
       'http://localhost:5173',
       'http://localhost:3000',
-      'chrome-extension://*'
-    ];
+      process.env.FRONTEND_URL // Add your production frontend URL here
+    ].filter(Boolean); // Remove undefined values
     
     // Check if the origin is allowed
     const isAllowed = allowedOrigins.some(allowedOrigin => {
@@ -239,29 +244,27 @@ app.post('/api/bookmarks/ai-categorize', async (req, res) => {
     const { url, title, description } = req.body;
     
     // Use a free LLM API (like HuggingFace's free tier) to analyze the content
-    const response = await fetch('https://api-inference.huggingface.co/models/facebook/bart-large-mnli', {
-      method: 'POST',
+    const response = await axios.post('https://api-inference.huggingface.co/models/facebook/bart-large-mnli', {
+      inputs: `${title} ${description || ''}`,
+      parameters: {
+        candidate_labels: [
+          'Technology', 'Science', 'Business', 'Entertainment', 
+          'Education', 'Health', 'Sports', 'News', 'Shopping',
+          'Social Media', 'Development', 'Design', 'Research'
+        ]
+      }
+    }, {
       headers: {
         'Authorization': `Bearer ${process.env.HUGGINGFACE_API_KEY}`,
         'Content-Type': 'application/json'
-      },
-      body: JSON.stringify({
-        inputs: `${title} ${description || ''}`,
-        parameters: {
-          candidate_labels: [
-            'Technology', 'Science', 'Business', 'Entertainment', 
-            'Education', 'Health', 'Sports', 'News', 'Shopping',
-            'Social Media', 'Development', 'Design', 'Research'
-          ]
-        }
-      })
+      }
     });
 
-    if (!response.ok) {
+    if (!response) {
       throw new Error('Failed to get AI categorization');
     }
 
-    const result = await response.json();
+    const result = response.data;
     
     // Get the top 3 categories and their confidence scores
     const categories = result.labels
@@ -273,28 +276,26 @@ app.post('/api/bookmarks/ai-categorize', async (req, res) => {
       .slice(0, 3);
 
     // Generate relevant tags based on the content
-    const tagsResponse = await fetch('https://api-inference.huggingface.co/models/facebook/bart-large-mnli', {
-      method: 'POST',
+    const tagsResponse = await axios.post('https://api-inference.huggingface.co/models/facebook/bart-large-mnli', {
+      inputs: `${title} ${description || ''}`,
+      parameters: {
+        candidate_labels: [
+          'tutorial', 'article', 'video', 'documentation', 'blog',
+          'news', 'guide', 'reference', 'tool', 'resource'
+        ]
+      }
+    }, {
       headers: {
         'Authorization': `Bearer ${process.env.HUGGINGFACE_API_KEY}`,
         'Content-Type': 'application/json'
-      },
-      body: JSON.stringify({
-        inputs: `${title} ${description || ''}`,
-        parameters: {
-          candidate_labels: [
-            'tutorial', 'article', 'video', 'documentation', 'blog',
-            'news', 'guide', 'reference', 'tool', 'resource'
-          ]
-        }
-      })
+      }
     });
 
-    if (!tagsResponse.ok) {
+    if (!tagsResponse) {
       throw new Error('Failed to get tag suggestions');
     }
 
-    const tagsResult = await tagsResponse.json();
+    const tagsResult = tagsResponse.data;
     const tags = tagsResult.labels
       .map((label, index) => ({
         name: label,
@@ -718,10 +719,17 @@ app.put('/api/bookmarks/:id', async (req, res) => {
 });
 
 // Serve the Chrome extension .crx file with the correct header
-app.get('/hello.crx', (req, res) => {
+app.get('/extension.crx', (req, res) => {
   res.setHeader('Content-Type', 'application/x-chrome-extension');
-  res.sendFile(join(__dirname, '../public/hello.crx'));
+  res.sendFile(join(__dirname, '../public/extension.crx'));
 });
+
+// Handle React routing in production
+if (process.env.NODE_ENV === 'production') {
+  app.get('*', (req, res) => {
+    res.sendFile(join(__dirname, 'dist', 'index.html'));
+  });
+}
 
 // Error handling middleware
 app.use((err, req, res, next) => {
