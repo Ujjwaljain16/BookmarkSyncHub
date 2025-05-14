@@ -502,7 +502,7 @@ app.post('/api/bookmarks', async (req, res) => {
 // DELETE all bookmarks
 app.delete('/api/bookmarks/all', async (req, res) => {
   try {
-    await writeBookmarks([]);
+    await writeBookmarks({ bookmarks: [] });  // Maintain the { bookmarks: [] } structure
     res.status(200).json({ message: 'All bookmarks deleted successfully' });
   } catch (error) {
     console.error('Error deleting all bookmarks:', error);
