@@ -515,7 +515,8 @@ app.delete('/api/bookmarks/all', async (req, res) => {
 app.delete('/api/bookmarks/:id', async (req, res) => {
   try {
     const { id } = req.params;
-    const bookmarks = await readBookmarks();
+    const data = await readBookmarks();
+    const bookmarks = data.bookmarks || [];
     const initialLength = bookmarks.length;
     const filteredBookmarks = bookmarks.filter(bookmark => bookmark.id !== id);
     
@@ -523,7 +524,7 @@ app.delete('/api/bookmarks/:id', async (req, res) => {
       return res.status(404).json({ error: 'Bookmark not found' });
     }
     
-    await writeBookmarks(filteredBookmarks);
+    await writeBookmarks({ bookmarks: filteredBookmarks });
     res.status(200).json({ message: 'Bookmark deleted successfully' });
   } catch (error) {
     console.error('Error deleting bookmark:', error);
@@ -538,7 +539,8 @@ app.delete('/api/bookmarks/url/:encodedUrl', async (req, res) => {
     const url = decodeURIComponent(encodedUrl);
     const normalizedUrl = normalizeUrl(url);
     
-    const bookmarks = await readBookmarks();
+    const data = await readBookmarks();
+    const bookmarks = data.bookmarks || [];
     const initialLength = bookmarks.length;
     
     const filteredBookmarks = bookmarks.filter(
@@ -549,7 +551,7 @@ app.delete('/api/bookmarks/url/:encodedUrl', async (req, res) => {
       return res.status(404).json({ error: 'Bookmark not found' });
     }
     
-    await writeBookmarks(filteredBookmarks);
+    await writeBookmarks({ bookmarks: filteredBookmarks });
     res.status(200).json({ message: 'Bookmark deleted successfully' });
   } catch (error) {
     console.error('Error deleting bookmark by URL:', error);
