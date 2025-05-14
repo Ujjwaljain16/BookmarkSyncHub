@@ -36,7 +36,7 @@ const CategoryFilter = () => {
     if (!editCategoryName.trim() || editCategoryName === selectedCategory) 
       return;
     try {
-      const res = await fetch('http://localhost:3000/api/bookmarks/update-category', {
+      const res = await fetch(`${config.apiBaseUrl}/bookmarks/update-category`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ oldCategory: selectedCategory, newCategory: editCategoryName.trim() })
