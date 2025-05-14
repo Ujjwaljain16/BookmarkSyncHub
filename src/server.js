@@ -38,19 +38,28 @@ const allowedOrigins = [
 app.use(cors({
   origin: function(origin, callback) {
     // Allow requests with no origin (like mobile apps or curl requests)
-    if (!origin) return callback(null, true);
+    if (!origin) {
+      return callback(null, true);
+    }
     
     // Allow Chrome extensions
     if (origin.startsWith('chrome-extension://')) {
       return callback(null, true);
     }
     
-    if (allowedOrigins.indexOf(origin) === -1) {
-      console.warn('CORS blocked request from origin:', origin);
-      const msg = 'The CORS policy for this site does not allow access from the specified Origin.';
-      return callback(new Error(msg), false);
+    // Allow localhost in development
+    if (process.env.NODE_ENV === 'development' && origin.startsWith('http://localhost')) {
+      return callback(null, true);
     }
-    return callback(null, true);
+    
+    // Check if origin is in allowed list
+    if (allowedOrigins.includes(origin)) {
+      return callback(null, true);
+    }
+    
+    console.warn('CORS blocked request from origin:', origin);
+    const msg = 'The CORS policy for this site does not allow access from the specified Origin.';
+    return callback(new Error(msg), false);
   },
   credentials: true,
   methods: ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS'],
@@ -60,13 +69,26 @@ app.use(cors({
 
 // Security headers
 app.use((req, res, next) => {
+  // Get the origin from the request
+  const origin = req.headers.origin;
+  
+  // Set CORS headers based on origin
+  if (origin) {
+    if (origin.startsWith('chrome-extension://')) {
+      res.setHeader('Access-Control-Allow-Origin', origin);
+    } else if (process.env.NODE_ENV === 'development' && origin.startsWith('http://localhost')) {
+      res.setHeader('Access-Control-Allow-Origin', origin);
+    } else if (allowedOrigins.includes(origin)) {
+      res.setHeader('Access-Control-Allow-Origin', origin);
+    }
+  }
+  
+  // Set other security headers
   res.setHeader('X-Content-Type-Options', 'nosniff');
   res.setHeader('X-Frame-Options', 'DENY');
   res.setHeader('X-XSS-Protection', '1; mode=block');
   res.setHeader('Strict-Transport-Security', 'max-age=31536000; includeSubDomains');
-  res.setHeader('Access-Control-Allow-Origin', process.env.NODE_ENV === 'production' 
-    ? 'https://bookmarkhub.onrender.com' 
-    : 'http://localhost:5173');
+  
   next();
 });
 
