@@ -8,7 +8,6 @@ import Index from "./pages/index";
 import Settings from "./pages/Settings";
 import NotFound from "./pages/NotFound";
 import { useAuth } from "./context/AuthContext";
-import { BookmarkProvider } from "./context/BookmarkContext";
 import AuthContainer from "./components/auth/AuthContainer";
 
 // Create a client
@@ -38,28 +37,26 @@ const ProtectedRoute = ({ children }) => {
 
 const App = () => (
   <QueryClientProvider client={queryClient}>
-    <BookmarkProvider>
-      <TooltipProvider>
-        <Toaster />
-        <Sonner position="top-right" />
-        <Router>
-          <Routes>
-            <Route path="/" element={<Index />} />
-            <Route path="/auth" element={<AuthContainer />} />
-            <Route path="/hub" element={<Index />} />
-            <Route 
-              path="/settings" 
-              element={
-                <ProtectedRoute>
-                  <Settings />
-                </ProtectedRoute>
-              } 
-            />
-            <Route path="*" element={<NotFound />} />
-          </Routes>
-        </Router>
-      </TooltipProvider>
-    </BookmarkProvider>
+    <TooltipProvider>
+      <Toaster />
+      <Sonner position="top-right" />
+      <Router>
+        <Routes>
+          <Route path="/" element={<Index />} />
+          <Route path="/auth" element={<AuthContainer />} />
+          <Route path="/hub" element={<Index />} />
+          <Route 
+            path="/settings" 
+            element={
+              <ProtectedRoute>
+                <Settings />
+              </ProtectedRoute>
+            } 
+          />
+          <Route path="*" element={<NotFound />} />
+        </Routes>
+      </Router>
+    </TooltipProvider>
   </QueryClientProvider>
 );
 

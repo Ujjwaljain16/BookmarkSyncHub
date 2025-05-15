@@ -1,23 +1,39 @@
 import React from 'react';
-import { useBookmarkContext } from '@/context/BookmarkContext';
-import BookmarkCard from '@/components/BookmarkCard';
-import { BookmarkIcon } from 'lucide-react'; // Renamed import to BookmarkIcon to avoid conflict
+import { useBookmarkContext } from '../context/BookmarkContext';
+import BookmarkCard from './BookmarkCard';
+import { Loader2 } from 'lucide-react';
 import PropTypes from 'prop-types';
 
 const BookmarkGrid = () => {
-  const { state } = useBookmarkContext();
-  
-  if (state.isLoading) {
-    return <LoadingState />;
+  const { bookmarks, filteredBookmarks, isLoading } = useBookmarkContext();
+
+  if (isLoading) {
+    return (
+      <div className="flex justify-center items-center min-h-[200px]">
+        <Loader2 className="h-8 w-8 animate-spin text-primary" />
+      </div>
+    );
   }
-  
-  if (state.filteredBookmarks.length === 0) {
-    return <EmptyState searchQuery={state.searchQuery} category={state.selectedCategory} />;
+
+  if (!bookmarks || bookmarks.length === 0) {
+    return (
+      <div className="text-center py-8">
+        <p className="text-muted-foreground">No bookmarks found. Add your first bookmark!</p>
+      </div>
+    );
   }
-  
+
+  if (filteredBookmarks.length === 0) {
+    return (
+      <div className="text-center py-8">
+        <p className="text-muted-foreground">No bookmarks match your current filters.</p>
+      </div>
+    );
+  }
+
   return (
-    <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
-      {state.filteredBookmarks.map((bookmark) => (
+    <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+      {filteredBookmarks.map((bookmark) => (
         <BookmarkCard key={bookmark.id} bookmark={bookmark} />
       ))}
     </div>
@@ -56,7 +72,7 @@ const EmptyState = ({ searchQuery, category }) => {
   return (
     <div className="flex flex-col items-center justify-center py-12">
       <div className="bg-gray-100 rounded-full p-4 mb-4">
-        <BookmarkIcon size={48} className="text-gray-400" /> {/* Changed to BookmarkIcon */}
+        <Loader2 className="h-8 w-8 animate-spin text-primary" />
       </div>
       <h3 className="text-lg font-medium mb-2">{message}</h3>
       <p className="text-gray-500 mb-4">

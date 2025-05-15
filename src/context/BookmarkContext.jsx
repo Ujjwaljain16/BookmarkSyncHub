@@ -25,7 +25,7 @@ const filterBookmarks = (bookmarks, category, searchQuery) => {
           bookmark.title.toLowerCase().includes(query) ||
           bookmark.description?.toLowerCase().includes(query) ||
           bookmark.url.toLowerCase().includes(query) ||
-          bookmark.tags.some((tag) => tag.toLowerCase().includes(query))
+          bookmark.tags?.some((tag) => tag.toLowerCase().includes(query))
         );
       }
       return true;
@@ -237,8 +237,8 @@ export const BookmarkProvider = ({ children }) => {
     ...state,
     addBookmark,
     removeBookmark,
-    setCategory: (category) => dispatch({ type: 'SET_CATEGORY', payload: category }),
-    setSearchQuery: (query) => dispatch({ type: 'SET_SEARCH', payload: query }),
+    setCategory,
+    setSearchQuery,
   };
 
   return (
