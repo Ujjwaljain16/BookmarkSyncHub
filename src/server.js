@@ -11,6 +11,7 @@ import path from 'path';
 import jwt from 'jsonwebtoken';
 
 dotenv.config();
+console.log('Bookmark Service JWT_SECRET:', process.env.JWT_SECRET);
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
@@ -402,7 +403,7 @@ function authenticateJWT(req, res, next) {
   if (!authHeader) return res.status(401).json({ error: 'No token provided' });
   const token = authHeader.split(' ')[1];
   if (!token) return res.status(401).json({ error: 'No token provided' });
-  jwt.verify(token, process.env.JWT_SECRET || 'your_jwt_secret', (err, user) => {
+  jwt.verify(token, process.env.JWT_SECRET, (err, user) => {
     if (err) return res.status(403).json({ error: 'Invalid token' });
     req.user = user;
     next();
