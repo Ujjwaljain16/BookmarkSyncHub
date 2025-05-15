@@ -3,7 +3,7 @@ import { toast } from 'sonner';
 import config from '../config';
 import { useAuth } from './AuthContext';
 
-const API_URL = `${config.apiBaseUrl}/bookmarks`;
+const API_URL = `${config.bookmarkBaseUrl}/bookmarks`;
 
 const initialState = {
   bookmarks: [],
