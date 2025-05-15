@@ -36,6 +36,7 @@ const tfidf = new TfIdf();
 const allowedOrigins = [
   'http://localhost:5173',
   'https://bookmarkhub.onrender.com',
+  'https://bookmarkservice-gee2.onrender.com',
   'chrome-extension://*'  // Allow all Chrome extensions
 ];
 
