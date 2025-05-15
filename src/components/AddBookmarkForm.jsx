@@ -41,17 +41,17 @@ const formSchema = z.object({
 });
 
 const AddBookmarkForm = () => {
-  const { addBookmark } = useBookmarkContext();
+  const { addBookmark, bookmarks } = useBookmarkContext();
   const [open, setOpen] = useState(false);
   const [categoryModalOpen, setCategoryModalOpen] = useState(false);
   const [newCategory, setNewCategory] = useState('');
   // Use local categories state for instant update
-  const [categories, setCategories] = useState(() => Array.from(new Set(state.bookmarks.map(b => b.category).filter(Boolean))));
+  const [categories, setCategories] = useState(() => Array.from(new Set(bookmarks.map(b => b.category).filter(Boolean))));
 
   // Update local categories if bookmarks change
   React.useEffect(() => {
-    setCategories(Array.from(new Set(state.bookmarks.map(b => b.category).filter(Boolean))));
-  }, [state.bookmarks]);
+    setCategories(Array.from(new Set(bookmarks.map(b => b.category).filter(Boolean))));
+  }, [bookmarks]);
 
   const form = useForm({
     resolver: zodResolver(formSchema),
