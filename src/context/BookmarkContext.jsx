@@ -95,12 +95,6 @@ export const BookmarkProvider = ({ children }) => {
 
   useEffect(() => {
     const loadBookmarks = async () => {
-      if (!user) {
-        dispatch({ type: 'SET_BOOKMARKS', payload: [] });
-        dispatch({ type: 'SET_LOADING', payload: false });
-        return;
-      }
-
       try {
         dispatch({ type: 'SET_LOADING', payload: true });
         
@@ -109,7 +103,7 @@ export const BookmarkProvider = ({ children }) => {
           method: 'GET',
           headers: {
             'Content-Type': 'application/json',
-            'Authorization': `Bearer ${token}`
+            ...(token && { 'Authorization': `Bearer ${token}` })
           },
         });
         

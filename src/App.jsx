@@ -44,16 +44,9 @@ const App = () => (
         <Sonner position="top-right" />
         <Router>
           <Routes>
-            <Route path="/" element={<Home />} />
+            <Route path="/" element={<Index />} />
             <Route path="/auth" element={<AuthContainer />} />
-            <Route 
-              path="/hub" 
-              element={
-                <ProtectedRoute>
-                  <Index />
-                </ProtectedRoute>
-              } 
-            />
+            <Route path="/hub" element={<Index />} />
             <Route 
               path="/settings" 
               element={
