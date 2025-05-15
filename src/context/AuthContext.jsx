@@ -22,7 +22,7 @@ export const AuthProvider = ({ children }) => {
       try {
         const token = localStorage.getItem('token');
         if (token) {
-          const response = await fetch(`${config.apiBaseUrl}/auth/me`, {
+          const response = await fetch(`${config.authBaseUrl}/auth/me`, {
             headers: {
               'Authorization': `Bearer ${token}`
             }
@@ -46,7 +46,7 @@ export const AuthProvider = ({ children }) => {
 
   const login = async (email, password) => {
     try {
-      const response = await fetch(`${config.apiBaseUrl}/auth/login`, {
+      const response = await fetch(`${config.authBaseUrl}/auth/login`, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
@@ -71,7 +71,7 @@ export const AuthProvider = ({ children }) => {
 
   const register = async (email, password, name) => {
     try {
-      const response = await fetch(`${config.apiBaseUrl}/auth/register`, {
+      const response = await fetch(`${config.authBaseUrl}/auth/register`, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
