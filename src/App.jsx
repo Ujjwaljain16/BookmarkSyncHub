@@ -7,7 +7,7 @@ import Home from "./pages/Home";
 import Index from "./pages/index";
 import Settings from "./pages/Settings";
 import NotFound from "./pages/NotFound";
-import { AuthProvider, useAuth } from "./context/AuthContext";
+import { useAuth } from "./context/AuthContext";
 import { BookmarkProvider } from "./context/BookmarkContext";
 import AuthContainer from "./components/auth/AuthContainer";
 
@@ -38,37 +38,35 @@ const ProtectedRoute = ({ children }) => {
 
 const App = () => (
   <QueryClientProvider client={queryClient}>
-    <AuthProvider>
-      <BookmarkProvider>
-        <TooltipProvider>
-          <Toaster />
-          <Sonner position="top-right" />
-          <Router>
-            <Routes>
-              <Route path="/" element={<Home />} />
-              <Route path="/auth" element={<AuthContainer />} />
-              <Route 
-                path="/hub" 
-                element={
-                  <ProtectedRoute>
-                    <Index />
-                  </ProtectedRoute>
-                } 
-              />
-              <Route 
-                path="/settings" 
-                element={
-                  <ProtectedRoute>
-                    <Settings />
-                  </ProtectedRoute>
-                } 
-              />
-              <Route path="*" element={<NotFound />} />
-            </Routes>
-          </Router>
-        </TooltipProvider>
-      </BookmarkProvider>
-    </AuthProvider>
+    <BookmarkProvider>
+      <TooltipProvider>
+        <Toaster />
+        <Sonner position="top-right" />
+        <Router>
+          <Routes>
+            <Route path="/" element={<Home />} />
+            <Route path="/auth" element={<AuthContainer />} />
+            <Route 
+              path="/hub" 
+              element={
+                <ProtectedRoute>
+                  <Index />
+                </ProtectedRoute>
+              } 
+            />
+            <Route 
+              path="/settings" 
+              element={
+                <ProtectedRoute>
+                  <Settings />
+                </ProtectedRoute>
+              } 
+            />
+            <Route path="*" element={<NotFound />} />
+          </Routes>
+        </Router>
+      </TooltipProvider>
+    </BookmarkProvider>
   </QueryClientProvider>
 );
 
