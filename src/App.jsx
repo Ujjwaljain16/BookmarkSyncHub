@@ -42,7 +42,7 @@ const App = () => (
       <Sonner position="top-right" />
       <Router>
         <Routes>
-          <Route path="/" element={<Index />} />
+          <Route path="/" element={<Home />} />
           <Route path="/auth" element={<AuthContainer />} />
           <Route path="/hub" element={<Index />} />
           <Route 

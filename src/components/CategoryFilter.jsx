@@ -11,7 +11,7 @@ import {
   DialogTitle as ModalTitle,
 } from '@/components/ui/dialog';
 import { Input } from '@/components/ui/input';
-import config from '@/config';
+import config from '../config';
 
 const iconMap = {
   other: <Tag className="h-4 w-4" />,
@@ -35,7 +35,7 @@ const CategoryFilter = () => {
     if (!editCategoryName.trim() || editCategoryName === selectedCategory) 
       return;
     try {
-      const res = await fetch(`${config.apiBaseUrl}/bookmarks/update-category`, {
+      const res = await fetch(`${config.bookmarkBaseUrl}/bookmarks/update-category`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ oldCategory: selectedCategory, newCategory: editCategoryName.trim() })
@@ -54,7 +54,7 @@ const CategoryFilter = () => {
   const handleDeleteCategory = async (e) => {
     e.preventDefault();
     try {
-      const res = await fetch(`${config.apiBaseUrl}/bookmarks/delete-category`, {
+      const res = await fetch(`${config.bookmarkBaseUrl}/bookmarks/delete-category`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ category: selectedCategory })
