@@ -1,5 +1,6 @@
 import React from 'react';
 import { useBookmarkContext } from '../context/BookmarkContext';
+import { Search } from 'lucide-react';
 
 const SearchBar = () => {
   const { searchQuery, setSearchQuery } = useBookmarkContext();
@@ -19,10 +20,10 @@ const SearchBar = () => {
       />
       <button
         type="submit"
-        className="px-4 py-2 bg-primary text-white rounded hover:bg-primary-dark"
+        className="px-4 py-2 bg-primary text-white rounded hover:bg-primary-dark flex items-center justify-center"
         aria-label="Search"
       >
-        <span role="img" aria-label="search">🔍</span>
+        <Search className="h-5 w-5" />
       </button>
     </form>
   );
