@@ -5,7 +5,7 @@ import { Loader2 } from 'lucide-react';
 import PropTypes from 'prop-types';
 
 const BookmarkGrid = () => {
-  const { bookmarks, filteredBookmarks, isLoading } = useBookmarkContext();
+  const { bookmarks, filteredBookmarks, isLoading, selectedCategory, searchQuery } = useBookmarkContext();
 
   if (isLoading) {
     return (
@@ -16,19 +16,11 @@ const BookmarkGrid = () => {
   }
 
   if (!bookmarks || bookmarks.length === 0) {
-    return (
-      <div className="text-center py-8">
-        <p className="text-muted-foreground">No bookmarks found. Add your first bookmark!</p>
-      </div>
-    );
+    return <EmptyState searchQuery={''} category={selectedCategory || 'all'} />;
   }
 
   if (filteredBookmarks.length === 0) {
-    return (
-      <div className="text-center py-8">
-        <p className="text-muted-foreground">No bookmarks match your current filters.</p>
-      </div>
-    );
+    return <EmptyState searchQuery={searchQuery} category={selectedCategory || 'all'} />;
   }
 
   return (

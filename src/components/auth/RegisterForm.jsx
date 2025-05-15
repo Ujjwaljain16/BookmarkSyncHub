@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import { Box, TextField, Button, Typography, Stack } from '@mui/material';
 import { useAuth } from '../../context/AuthContext';
 import { motion } from 'framer-motion';
+import { useNavigate } from 'react-router-dom';
 
 const RegisterForm = ({ onToggle }) => {
   const [name, setName] = useState('');
@@ -10,6 +11,7 @@ const RegisterForm = ({ onToggle }) => {
   const [confirmPassword, setConfirmPassword] = useState('');
   const [loading, setLoading] = useState(false);
   const { register } = useAuth();
+  const navigate = useNavigate();
 
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -20,6 +22,7 @@ const RegisterForm = ({ onToggle }) => {
     setLoading(true);
     try {
       await register(email, password, name);
+      navigate('/hub');
     } catch (error) {
       console.error('Registration failed:', error);
     } finally {

@@ -2,18 +2,21 @@ import React, { useState } from 'react';
 import { Box, TextField, Button, Typography, Stack } from '@mui/material';
 import { useAuth } from '../../context/AuthContext';
 import { motion } from 'framer-motion';
+import { useNavigate } from 'react-router-dom';
 
 const LoginForm = ({ onToggle }) => {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [loading, setLoading] = useState(false);
   const { login } = useAuth();
+  const navigate = useNavigate();
 
   const handleSubmit = async (e) => {
     e.preventDefault();
     setLoading(true);
     try {
       await login(email, password);
+      navigate('/hub');
     } catch (error) {
       console.error('Login failed:', error);
     } finally {

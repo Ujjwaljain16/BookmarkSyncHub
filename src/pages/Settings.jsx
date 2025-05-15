@@ -30,7 +30,7 @@ const Settings = () => {
 
   const handleDeleteAllBookmarks = async () => {
     try {
-      const response = await fetch(`${config.apiBaseUrl}/bookmarks/all`, {
+      const response = await fetch(`${config.bookmarkBaseUrl}/bookmarks/all`, {
         method: 'DELETE',
       });
 
