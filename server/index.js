@@ -1,4 +1,5 @@
 require('dotenv').config();
+console.log('Auth Service JWT_SECRET:', process.env.JWT_SECRET); // <-- Add this line
 const express = require('express');
 const cors = require('cors');
 const bcrypt = require('bcryptjs');
@@ -9,7 +10,7 @@ const app = express();
 
 // Use Render's PORT or fallback to 3000 for local development
 const PORT = process.env.PORT || 3000;
-const JWT_SECRET = process.env.JWT_SECRET || 'your-secret-key';
+const JWT_SECRET = process.env.JWT_SECRET;
 
 // CORS configuration
 const corsOptions = {
