@@ -14,7 +14,7 @@ const JWT_SECRET = process.env.JWT_SECRET || 'your-secret-key';
 // CORS configuration
 const corsOptions = {
   origin: process.env.NODE_ENV === 'production' 
-    ? ['https://bookmarkhub.onrender.com', 'https://bookmarkhub.vercel.app']
+    ? ['https://bookmarkhub.onrender.com', 'https://bookmarkhub.vercel.app', 'https://bookmarks-hub.vercel.app']
     : 'http://localhost:5173',
   credentials: true,
   methods: ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS'],
