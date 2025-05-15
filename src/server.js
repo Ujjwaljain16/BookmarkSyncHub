@@ -8,6 +8,7 @@ import axios from 'axios';
 import dotenv from 'dotenv';
 import natural from 'natural';
 import path from 'path';
+import jwt from 'jsonwebtoken';
 
 dotenv.config();
 
@@ -395,11 +396,26 @@ app.post('/api/bookmarks/ai-categorize', async (req, res) => {
   }
 });
 
-// GET all bookmarks
-app.get('/api/bookmarks', async (req, res) => {
+// Auth middleware to extract user from JWT
+function authenticateJWT(req, res, next) {
+  const authHeader = req.headers['authorization'];
+  if (!authHeader) return res.status(401).json({ error: 'No token provided' });
+  const token = authHeader.split(' ')[1];
+  if (!token) return res.status(401).json({ error: 'No token provided' });
+  jwt.verify(token, process.env.JWT_SECRET || 'your_jwt_secret', (err, user) => {
+    if (err) return res.status(403).json({ error: 'Invalid token' });
+    req.user = user;
+    next();
+  });
+}
+
+// GET all bookmarks for the authenticated user
+app.get('/api/bookmarks', authenticateJWT, async (req, res) => {
   try {
-    const bookmarks = await readBookmarks();
-    res.json(bookmarks);
+    const data = await readBookmarks();
+    const bookmarks = data.bookmarks || [];
+    const userBookmarks = bookmarks.filter(b => b.userId === req.user.id);
+    res.json(userBookmarks);
   } catch (error) {
     console.error('Error reading bookmarks:', error);
     res.status(500).json({ error: 'Failed to read bookmarks' });
@@ -429,8 +445,8 @@ app.get('/api/bookmarks/url', async (req, res) => {
   }
 });
 
-// POST new bookmark
-app.post('/api/bookmarks', async (req, res) => {
+// POST new bookmark for the authenticated user
+app.post('/api/bookmarks', authenticateJWT, async (req, res) => {
   try {
     if (!req.body || !req.body.url) {
       return res.status(400).json({ 
@@ -438,57 +454,38 @@ app.post('/api/bookmarks', async (req, res) => {
         message: 'URL is required'
       });
     }
-
-    console.log('Received bookmark data:', {
-      url: req.body.url,
-      title: req.body.title,
-      category: req.body.category,
-      source: req.body.source
-    });
-
     const data = await readBookmarks();
     const bookmarks = data.bookmarks || [];
-    
-    // Check for duplicates by URL
     const normalizedUrl = normalizeUrl(req.body.url);
     const existingBookmarkIndex = bookmarks.findIndex(
-      b => normalizeUrl(b.url) === normalizedUrl
+      b => normalizeUrl(b.url) === normalizedUrl && b.userId === req.user.id
     );
-    
     if (existingBookmarkIndex !== -1) {
       // Update existing bookmark
       const updatedBookmark = {
         ...bookmarks[existingBookmarkIndex],
         ...req.body,
-        url: req.body.url, // Keep original URL capitalization
+        userId: req.user.id,
+        url: req.body.url,
         lastVisited: new Date().toISOString(),
         visitCount: (bookmarks[existingBookmarkIndex].visitCount || 0) + 1
       };
-      
       bookmarks[existingBookmarkIndex] = updatedBookmark;
       await writeBookmarks({ bookmarks });
-      
-      res.status(200).json({ 
-        bookmark: updatedBookmark,
-        wasDuplicate: true 
-      });
+      res.status(200).json({ bookmark: updatedBookmark, wasDuplicate: true });
     } else {
       // Add new bookmark
       const bookmark = {
         id: uuidv4(),
         ...req.body,
+        userId: req.user.id,
         createdAt: new Date().toISOString(),
         lastVisited: new Date().toISOString(),
         visitCount: 1
       };
-      
       bookmarks.push(bookmark);
       await writeBookmarks({ bookmarks });
-      
-      res.status(201).json({ 
-        bookmark,
-        wasDuplicate: false 
-      });
+      res.status(201).json({ bookmark, wasDuplicate: false });
     }
   } catch (error) {
     console.error('Error adding bookmark:', error);
@@ -496,35 +493,36 @@ app.post('/api/bookmarks', async (req, res) => {
       error: 'Failed to add bookmark',
       message: error.message || 'Internal server error',
       details: process.env.NODE_ENV === 'development' ? error.stack : undefined,
-      code: error.code // Include error code for file system errors
+      code: error.code
     });
   }
 });
 
-// DELETE all bookmarks
-app.delete('/api/bookmarks/all', async (req, res) => {
+// DELETE all bookmarks (user-specific)
+app.delete('/api/bookmarks/all', authenticateJWT, async (req, res) => {
   try {
-    await writeBookmarks({ bookmarks: [] });  // Maintain the { bookmarks: [] } structure
-    res.status(200).json({ message: 'All bookmarks deleted successfully' });
+    const data = await readBookmarks();
+    const bookmarks = data.bookmarks || [];
+    const filteredBookmarks = bookmarks.filter(b => b.userId !== req.user.id);
+    await writeBookmarks({ bookmarks: filteredBookmarks });
+    res.status(200).json({ message: 'All your bookmarks deleted successfully' });
   } catch (error) {
     console.error('Error deleting all bookmarks:', error);
     res.status(500).json({ error: 'Failed to delete all bookmarks' });
   }
 });
 
-// DELETE bookmark by ID
-app.delete('/api/bookmarks/:id', async (req, res) => {
+// DELETE bookmark by ID (user-specific)
+app.delete('/api/bookmarks/:id', authenticateJWT, async (req, res) => {
   try {
     const { id } = req.params;
     const data = await readBookmarks();
     const bookmarks = data.bookmarks || [];
-    const initialLength = bookmarks.length;
-    const filteredBookmarks = bookmarks.filter(bookmark => bookmark.id !== id);
-    
-    if (filteredBookmarks.length === initialLength) {
+    const bookmark = bookmarks.find(b => b.id === id);
+    if (!bookmark || bookmark.userId !== req.user.id) {
       return res.status(404).json({ error: 'Bookmark not found' });
     }
-    
+    const filteredBookmarks = bookmarks.filter(b => !(b.id === id && b.userId === req.user.id));
     await writeBookmarks({ bookmarks: filteredBookmarks });
     res.status(200).json({ message: 'Bookmark deleted successfully' });
   } catch (error) {
@@ -560,77 +558,49 @@ app.delete('/api/bookmarks/url/:encodedUrl', async (req, res) => {
   }
 });
 
-// Bulk import bookmarks
-app.post('/api/bookmarks/import', async (req, res) => {
+// Bulk import bookmarks (user-specific)
+app.post('/api/bookmarks/import', authenticateJWT, async (req, res) => {
   try {
     const data = await readBookmarks();
     const existingBookmarks = data.bookmarks || [];
     const importedBookmarks = [];
     const updatedBookmarks = [];
     const skippedBookmarks = [];
-    
-    // Process each bookmark in the request
     for (const bookmarkData of req.body) {
       if (!bookmarkData.url) {
-        skippedBookmarks.push({
-          ...bookmarkData,
-          reason: 'Missing URL'
-        });
+        skippedBookmarks.push({ ...bookmarkData, reason: 'Missing URL' });
         continue;
       }
       const normalizedUrl = normalizeUrl(bookmarkData.url);
-      
-      // Check for duplicates
       const existingIndex = existingBookmarks.findIndex(
-        b => normalizeUrl(b.url) === normalizedUrl
+        b => normalizeUrl(b.url) === normalizedUrl && b.userId === req.user.id
       );
-      
       if (existingIndex !== -1) {
         // Update existing bookmark
-        const existingTimestamp = new Date(existingBookmarks[existingIndex].lastModified || 
-          existingBookmarks[existingIndex].lastVisited || 
-          existingBookmarks[existingIndex].createdAt).getTime();
-
-        const importTimestamp = new Date(bookmarkData.lastModified || 
-          bookmarkData.lastVisited || 
-          new Date().toISOString()).getTime();
-        if (existingTimestamp >= importTimestamp && 
-          existingBookmarks[existingIndex].tags?.length && 
-          existingBookmarks[existingIndex].description) {
-          skippedBookmarks.push({
-            url: bookmarkData.url,
-            title: bookmarkData.title,
-            reason: 'Existing bookmark has newer data'
-          });
-          continue;
-        }
-
         const updatedBookmark = {
           ...existingBookmarks[existingIndex],
-          title: bookmarkData.title || existingBookmarks[existingIndex].title,
-          description: bookmarkData.description || existingBookmarks[existingIndex].description,
+          ...bookmarkData,
+          userId: req.user.id,
           lastVisited: new Date().toISOString(),
           lastModified: new Date().toISOString(),
           visitCount: (existingBookmarks[existingIndex].visitCount || 0) + 1,
-          // Merge tags without duplicates
           tags: Array.from(new Set([
             ...(existingBookmarks[existingIndex].tags || []),
             ...(bookmarkData.tags || [])
           ])),
-          // Keep existing category if it's more specific than 'other'
-          category: existingBookmarks[existingIndex].category !== 'other' ? 
-            existingBookmarks[existingIndex].category : (bookmarkData.category || 'other'),
-          // Use whichever favicon is not null, preferring the new one
+          category: existingBookmarks[existingIndex].category !== 'other'
+            ? existingBookmarks[existingIndex].category
+            : (bookmarkData.category || 'other'),
           favicon: bookmarkData.favicon || existingBookmarks[existingIndex].favicon
         };
-        
         existingBookmarks[existingIndex] = updatedBookmark;
         updatedBookmarks.push(updatedBookmark);
       } else {
-        // Create new bookmark
+        // Create new bookmark for this user
         const newBookmark = {
           id: uuidv4(),
           ...bookmarkData,
+          userId: req.user.id,
           createdAt: new Date().toISOString(),
           lastVisited: new Date().toISOString(),
           lastModified: new Date().toISOString(),
@@ -638,20 +608,16 @@ app.post('/api/bookmarks/import', async (req, res) => {
           tags: bookmarkData.tags || [],
           category: bookmarkData.category || 'other'
         };
-        
         existingBookmarks.push(newBookmark);
         importedBookmarks.push(newBookmark);
       }
     }
-    
-    // Save the updated bookmarks
     await writeBookmarks({ bookmarks: existingBookmarks });
-    
-    res.status(201).json({ 
+    res.status(201).json({
       added: importedBookmarks.length,
       updated: updatedBookmarks.length,
       skipped: skippedBookmarks.length,
-      total: existingBookmarks.length,
+      total: existingBookmarks.filter(b => b.userId === req.user.id).length,
       details: {
         added: importedBookmarks,
         updated: updatedBookmarks,
@@ -664,38 +630,44 @@ app.post('/api/bookmarks/import', async (req, res) => {
   }
 });
 
-// Bulk update category for all bookmarks
-app.post('/api/bookmarks/update-category', async (req, res) => {
+// Bulk update category for all bookmarks (user-specific)
+app.post('/api/bookmarks/update-category', authenticateJWT, async (req, res) => {
   try {
     const { oldCategory, newCategory } = req.body;
     if (!oldCategory || !newCategory) {
       return res.status(400).json({ error: 'oldCategory and newCategory are required' });
     }
-    const bookmarks = await readBookmarks();
+    const data = await readBookmarks();
+    const bookmarks = data.bookmarks || [];
     const updated = bookmarks.map(b =>
-      b.category === oldCategory ? { ...b, category: newCategory } : b
+      b.userId === req.user.id && b.category === oldCategory
+        ? { ...b, category: newCategory }
+        : b
     );
-    await writeBookmarks(updated);
-    res.status(200).json({ message: 'Category updated', bookmarks: updated });
+    await writeBookmarks({ bookmarks: updated });
+    res.status(200).json({ message: 'Category updated', bookmarks: updated.filter(b => b.userId === req.user.id) });
   } catch (error) {
     console.error('Error updating category:', error);
     res.status(500).json({ error: 'Failed to update category' });
   }
 });
 
-// Bulk move category to 'other' (delete category)
-app.post('/api/bookmarks/delete-category', async (req, res) => {
+// Bulk move category to 'other' (delete category, user-specific)
+app.post('/api/bookmarks/delete-category', authenticateJWT, async (req, res) => {
   try {
     const { category } = req.body;
     if (!category) {
       return res.status(400).json({ error: 'category is required' });
     }
-    const bookmarks = await readBookmarks();
+    const data = await readBookmarks();
+    const bookmarks = data.bookmarks || [];
     const updated = bookmarks.map(b =>
-      b.category === category ? { ...b, category: 'other' } : b
+      b.userId === req.user.id && b.category === category
+        ? { ...b, category: 'other' }
+        : b
     );
-    await writeBookmarks(updated);
-    res.status(200).json({ message: 'Category deleted', bookmarks: updated });
+    await writeBookmarks({ bookmarks: updated });
+    res.status(200).json({ message: 'Category deleted', bookmarks: updated.filter(b => b.userId === req.user.id) });
   } catch (error) {
     console.error('Error deleting category:', error);
     res.status(500).json({ error: 'Failed to delete category' });
@@ -761,62 +733,41 @@ app.get('/api/bookmarks/find-by-chrome-id/:chromeId', async (req, res) => {
   }
 });
 
-// Update bookmark by ID
-app.put('/api/bookmarks/:id', async (req, res) => {
+// PUT update bookmark by ID (user-specific)
+app.put('/api/bookmarks/:id', authenticateJWT, async (req, res) => {
   try {
     const { id } = req.params;
     const updates = req.body;
-    
-    if (!id) {
-      return res.status(400).json({ 
-        error: 'Invalid request',
-        message: 'Bookmark ID is required'
-      });
-    }
-
-    const bookmarks = await readBookmarks();
-    const bookmarkIndex = bookmarks.findIndex(b => b.id === id);
-    
+    const data = await readBookmarks();
+    const bookmarks = data.bookmarks || [];
+    const bookmarkIndex = bookmarks.findIndex(b => b.id === id && b.userId === req.user.id);
     if (bookmarkIndex === -1) {
-      return res.status(404).json({ 
-        error: 'Bookmark not found',
-        message: 'No bookmark found with the specified ID'
-      });
+      return res.status(404).json({ error: 'Bookmark not found' });
     }
-
-    // If URL is being updated, check for duplicates
+    // If URL is being updated, check for duplicates for this user
     if (updates.url) {
       const normalizedUrl = normalizeUrlForComparison(updates.url);
-      const existingBookmark = await findDuplicateBookmark(normalizedUrl);
-      
-      if (existingBookmark && existingBookmark.id !== id) {
-        return res.status(409).json({ 
-          error: 'Duplicate bookmark',
-          message: 'A bookmark with this URL already exists',
-          existingBookmark
-        });
+      const existingBookmark = bookmarks.find(
+        b => normalizeUrlForComparison(b.url) === normalizedUrl && b.userId === req.user.id && b.id !== id
+      );
+      if (existingBookmark) {
+        return res.status(409).json({ error: 'Duplicate bookmark', existingBookmark });
       }
     }
-
     const updatedBookmark = {
       ...bookmarks[bookmarkIndex],
       ...updates,
       updatedAt: new Date().toISOString()
     };
-
     bookmarks[bookmarkIndex] = updatedBookmark;
-    await writeBookmarks(bookmarks);
-
+    await writeBookmarks({ bookmarks });
     res.json({
       message: 'Bookmark updated successfully',
       bookmark: updatedBookmark
     });
   } catch (error) {
     console.error('Error updating bookmark:', error);
-    res.status(500).json({ 
-      error: 'Failed to update bookmark',
-      message: error.message
-    });
+    res.status(500).json({ error: 'Failed to update bookmark', message: error.message });
   }
 });
 
