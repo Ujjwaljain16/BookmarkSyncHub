@@ -1,6 +1,7 @@
 import React, { createContext, useContext, useReducer, useEffect } from 'react';
 import { toast } from 'sonner';
 import config from '../config';
+import { useAuth } from './AuthContext';
 
 const API_URL = `${config.apiBaseUrl}/bookmarks`;
 
@@ -90,16 +91,25 @@ export const useBookmarkContext = () => {
 
 export const BookmarkProvider = ({ children }) => {
   const [state, dispatch] = useReducer(bookmarkReducer, initialState);
+  const { user } = useAuth();
 
   useEffect(() => {
     const loadBookmarks = async () => {
+      if (!user) {
+        dispatch({ type: 'SET_BOOKMARKS', payload: [] });
+        dispatch({ type: 'SET_LOADING', payload: false });
+        return;
+      }
+
       try {
         dispatch({ type: 'SET_LOADING', payload: true });
         
+        const token = localStorage.getItem('token');
         const res = await fetch(API_URL, {
           method: 'GET',
           headers: {
             'Content-Type': 'application/json',
+            'Authorization': `Bearer ${token}`
           },
         });
         
@@ -108,32 +118,34 @@ export const BookmarkProvider = ({ children }) => {
         }
         
         const data = await res.json();
-        // Ensure we're using the bookmarks array from the response
         const bookmarks = Array.isArray(data) ? data : (data.bookmarks || []);
         dispatch({ type: 'SET_BOOKMARKS', payload: bookmarks });
       } catch (error) {
         console.error('Failed to load bookmarks:', error);
         toast.error(`Failed to load bookmarks: ${error.message}`);
-
-        // Load mock data if fetch fails
-        if (error.message.includes('Failed to fetch')) {
-          console.log('Loading mock bookmarks instead');
-          dispatch({ type: 'SET_BOOKMARKS', payload: mockBookmarks });
-        }
       } finally {
         dispatch({ type: 'SET_LOADING', payload: false });
       }
     };
     
     loadBookmarks();
-  }, []);
+  }, [user]);
 
   const addBookmark = async (data) => {
+    if (!user) {
+      toast.error('Please login to add bookmarks');
+      return;
+    }
+
     try {
+      const token = localStorage.getItem('token');
       // First check for duplicates
       const checkDuplicateRes = await fetch(`${API_URL}/check-duplicate`, {
         method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
+        headers: { 
+          'Content-Type': 'application/json',
+          'Authorization': `Bearer ${token}`
+        },
         body: JSON.stringify({ url: data.url }),
       });
 
@@ -151,8 +163,11 @@ export const BookmarkProvider = ({ children }) => {
       // If not a duplicate, proceed with adding the bookmark
       const res = await fetch(API_URL, {
         method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify(data),
+        headers: { 
+          'Content-Type': 'application/json',
+          'Authorization': `Bearer ${token}`
+        },
+        body: JSON.stringify({ ...data, userId: user.id }),
       });
       
       if (!res.ok) {
@@ -171,7 +186,13 @@ export const BookmarkProvider = ({ children }) => {
   };
 
   const removeBookmark = async (id) => {
+    if (!user) {
+      toast.error('Please login to remove bookmarks');
+      return;
+    }
+
     try {
+      const token = localStorage.getItem('token');
       // Optimistic update
       dispatch({ type: 'REMOVE_BOOKMARK', payload: id });
       
@@ -179,6 +200,7 @@ export const BookmarkProvider = ({ children }) => {
         method: 'DELETE',
         headers: {
           'Content-Type': 'application/json',
+          'Authorization': `Bearer ${token}`
         },
       });
       
@@ -193,13 +215,18 @@ export const BookmarkProvider = ({ children }) => {
       
       // Revert optimistic update on error
       try {
-        const res = await fetch(API_URL);
+        const token = localStorage.getItem('token');
+        const res = await fetch(API_URL, {
+          headers: {
+            'Authorization': `Bearer ${token}`
+          }
+        });
         if (res.ok) {
           const bookmarks = await res.json();
           dispatch({ type: 'SET_BOOKMARKS', payload: bookmarks });
         }
-      } catch (fetchError) {
-        console.error('Failed to revert bookmark removal:', fetchError);
+      } catch (error) {
+        console.error('Failed to revert bookmark removal:', error);
       }
     }
   };
@@ -212,10 +239,16 @@ export const BookmarkProvider = ({ children }) => {
     dispatch({ type: 'SET_SEARCH', payload: query });
   };
 
+  const value = {
+    ...state,
+    addBookmark,
+    removeBookmark,
+    setCategory: (category) => dispatch({ type: 'SET_CATEGORY', payload: category }),
+    setSearchQuery: (query) => dispatch({ type: 'SET_SEARCH', payload: query }),
+  };
+
   return (
-    <BookmarkContext.Provider
-      value={{ state, dispatch, addBookmark, removeBookmark, setCategory, setSearchQuery }}
-    >
+    <BookmarkContext.Provider value={value}>
       {children}
     </BookmarkContext.Provider>
   );
