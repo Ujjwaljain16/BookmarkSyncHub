@@ -1,13 +1,13 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
-import SearchBar from '@/components/SearchBar';
-import AddBookmarkForm from '@/components/AddBookmarkForm';
+import SearchBar from '../components/SearchBar';
+import AddBookmarkForm from '../components/AddBookmarkForm';
 import { Bookmark, Settings } from 'lucide-react';
-import { Button } from '@/components/ui/button';
-import { useBookmarkContext } from '@/context/BookmarkContext';
+import { Button } from '../components/ui/button';
+import { useBookmarkContext } from '../context/BookmarkContext';
 
 const Header = () => {
-  const { state } = useBookmarkContext();
+  const { bookmarks, filteredBookmarks, isLoading, selectedCategory, searchQuery } = useBookmarkContext();
   
   return (
     <header className="py-4 border-b">
@@ -37,13 +37,13 @@ const Header = () => {
           </div>
           
           <div className="text-sm text-muted-foreground">
-            {state.isLoading ? (
+            {isLoading ? (
               <span className="animate-pulse-gentle">Loading bookmarks...</span>
             ) : (
               <span>
-                {state.filteredBookmarks.length} bookmark{state.filteredBookmarks.length !== 1 ? 's' : ''}
-                {state.selectedCategory !== 'all' && ` in ${state.selectedCategory}`}
-                {state.searchQuery && ` matching "${state.searchQuery}"`}
+                {filteredBookmarks.length} bookmark{filteredBookmarks.length !== 1 ? 's' : ''}
+                {selectedCategory !== 'all' && ` in ${selectedCategory}`}
+                {searchQuery && ` matching "${searchQuery}"`}
               </span>
             )}
           </div>

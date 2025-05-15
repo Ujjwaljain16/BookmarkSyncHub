@@ -28,7 +28,7 @@ import {
 } from '@/components/ui/select';
 import { Button } from '@/components/ui/button';
 import { Plus } from 'lucide-react';
-import { useBookmarkContext } from '@/context/BookmarkContext';
+import { useBookmarkContext } from '../context/BookmarkContext';
 import { toast } from 'sonner';
 import { Dialog as Modal, DialogContent as ModalContent, DialogHeader as ModalHeader, DialogTitle as ModalTitle } from '@/components/ui/dialog';
 
@@ -41,7 +41,7 @@ const formSchema = z.object({
 });
 
 const AddBookmarkForm = () => {
-  const { addBookmark, state } = useBookmarkContext();
+  const { addBookmark } = useBookmarkContext();
   const [open, setOpen] = useState(false);
   const [categoryModalOpen, setCategoryModalOpen] = useState(false);
   const [newCategory, setNewCategory] = useState('');

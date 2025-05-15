@@ -1,57 +1,29 @@
-import React, { useState, useEffect } from 'react';
-import { Input } from '@/components/ui/input';
-import { Button } from '@/components/ui/button';
-import { Search, X } from 'lucide-react';
-import { useBookmarkContext } from '@/context/BookmarkContext';
+import React from 'react';
+import { useBookmarkContext } from '../context/BookmarkContext';
 
 const SearchBar = () => {
-  const { state, setSearchQuery } = useBookmarkContext();
-  const [inputValue, setInputValue] = useState(state.searchQuery);
-  
-  useEffect(() => {
-    setInputValue(state.searchQuery);
-  }, [state.searchQuery]);
-  
-  const handleSearch = (e) => {
-    e.preventDefault();
-    setSearchQuery(inputValue);
-  };
-  
-  const clearSearch = () => {
-    setInputValue('');
-    setSearchQuery('');
-  };
-  
+  const { searchQuery, setSearchQuery } = useBookmarkContext();
+
   return (
-    <form onSubmit={handleSearch} className="relative flex w-full items-center">
-      <Input
+    <form
+      className="flex items-center gap-2 w-full"
+      onSubmit={e => e.preventDefault()}
+      role="search"
+    >
+      <input
         type="search"
+        className="flex-1 px-4 py-2 border rounded focus:outline-none focus:ring"
         placeholder="Search bookmarks..."
-        className="pr-10 focus-visible:ring-bookmark-primary"
-        value={inputValue}
-        onChange={(e) => setInputValue(e.target.value)}
+        value={searchQuery}
+        onChange={e => setSearchQuery(e.target.value)}
       />
-      {inputValue ? (
-        <Button
-          type="button"
-          variant="ghost"
-          size="sm"
-          className="absolute right-10 h-full px-2 py-0"
-          onClick={clearSearch}
-        >
-          <X className="h-4 w-4" />
-          <span className="sr-only">Clear</span>
-        </Button>
-      ) : null}
-      <Button
+      <button
         type="submit"
-        variant="ghost"
-        size="sm"
-        className="absolute right-0 h-full px-3 py-0"
+        className="px-4 py-2 bg-primary text-white rounded hover:bg-primary-dark"
+        aria-label="Search"
       >
-        <Search className="h-4 w-4" />
-        <span className="sr-only">Search</span>
-      </Button>
+        <span role="img" aria-label="search">🔍</span>
+      </button>
     </form>
   );
 };

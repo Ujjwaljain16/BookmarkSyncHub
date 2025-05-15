@@ -1,7 +1,7 @@
 import React from 'react';
 import { Button } from '@/components/ui/button';
 import { Badge } from '@/components/ui/badge';
-import { useBookmarkContext } from '@/context/BookmarkContext';
+import { useBookmarkContext } from '../context/BookmarkContext';
 import PropTypes from 'prop-types';
 import { Bookmark, Tag, Hash, Pencil, Trash2 } from 'lucide-react';
 import {
@@ -18,17 +18,16 @@ const iconMap = {
 };
 
 const CategoryFilter = () => {
-  const { state, setCategory, dispatch } = useBookmarkContext();
+  const { bookmarks, selectedCategory, setCategory, setSearchQuery } = useBookmarkContext();
   const [editModalOpen, setEditModalOpen] = React.useState(false);
   const [deleteModalOpen, setDeleteModalOpen] = React.useState(false);
-  const [selectedCategory, setSelectedCategory] = React.useState('');
   const [editCategoryName, setEditCategoryName] = React.useState('');
 
-// unique categories 
+  // unique categories 
   const categories = Array.from(
-    new Set(state.bookmarks.map(b => b.category).filter(Boolean))
+    new Set(bookmarks.map(b => b.category).filter(Boolean))
   );
-  const getCount = (cat) => state.bookmarks.filter(b => b.category === cat).length;
+  const getCount = (cat) => bookmarks.filter(b => b.category === cat).length;
 
   // edit
   const handleEditCategory = async (e) => {
@@ -43,10 +42,9 @@ const CategoryFilter = () => {
       });
       if (!res.ok) throw new Error('Failed to update category');
       const data = await res.json();
-      dispatch({ type: 'SET_BOOKMARKS', payload: data.bookmarks });
+      setCategory(data.bookmarks);
       setEditModalOpen(false);
       setEditCategoryName('');
-      setSelectedCategory('');
     } catch (error) {
       alert('Failed to update category');
     }
@@ -63,9 +61,8 @@ const CategoryFilter = () => {
       });
       if (!res.ok) throw new Error('Failed to delete category');
       const data = await res.json();
-      dispatch({ type: 'SET_BOOKMARKS', payload: data.bookmarks });
+      setCategory(data.bookmarks);
       setDeleteModalOpen(false);
-      setSelectedCategory('');
     } catch (error) {
       alert('Failed to delete category');
     }
@@ -75,8 +72,8 @@ const CategoryFilter = () => {
     <div className="flex flex-col space-y-1 w-full">
       <Button
         key="all"
-        variant={state.selectedCategory === 'all' ? 'default' : 'ghost'}
-        className={`justify-start ${state.selectedCategory === 'all' ? 'bg-bookmark-primary hover:bg-bookmark-primary/90' : ''}`}
+        variant={selectedCategory === 'all' ? 'default' : 'ghost'}
+        className={`justify-start ${selectedCategory === 'all' ? 'bg-bookmark-primary hover:bg-bookmark-primary/90' : ''}`}
         onClick={() => setCategory('all')}
       >
         <div className="flex items-center">
@@ -88,8 +85,8 @@ const CategoryFilter = () => {
       {categories.map((cat) => (
         <div key={cat} className="flex items-center group">
           <Button
-            variant={state.selectedCategory === cat ? 'default' : 'ghost'}
-            className={`flex-1 justify-start ${state.selectedCategory === cat ? 'bg-bookmark-primary hover:bg-bookmark-primary/90' : ''}`}
+            variant={selectedCategory === cat ? 'default' : 'ghost'}
+            className={`flex-1 justify-start ${selectedCategory === cat ? 'bg-bookmark-primary hover:bg-bookmark-primary/90' : ''}`}
             onClick={() => setCategory(cat)}
           >
             <div className="flex items-center">
@@ -102,14 +99,14 @@ const CategoryFilter = () => {
           <button
             className="ml-1 p-1 text-gray-400 hover:text-blue-600 invisible group-hover:visible"
             title="Edit"
-            onClick={() => { setSelectedCategory(cat); setEditCategoryName(cat); setEditModalOpen(true); }}
+            onClick={() => { setEditCategoryName(cat); setEditModalOpen(true); }}
           >
             <Pencil size={16} />
           </button>
           <button
             className="ml-1 p-1 text-gray-400 hover:text-red-600 invisible group-hover:visible"
             title="Delete"
-            onClick={() => { setSelectedCategory(cat); setDeleteModalOpen(true); }}
+            onClick={() => { setDeleteModalOpen(true); }}
           >
             <Trash2 size={16} />
           </button>
@@ -162,7 +159,7 @@ const CategoryFilter = () => {
           Popular Tags
         </div>
         <div className="flex flex-wrap gap-2">
-          {getTopTags(state.bookmarks).map((tag) => (
+          {getTopTags(bookmarks).map((tag) => (
             <TagBadge key={tag.name} tag={tag} />
           ))}
         </div>
@@ -172,9 +169,9 @@ const CategoryFilter = () => {
 };
 
 const TagBadge = ({ tag }) => {
-  const { state, setSearchQuery } = useBookmarkContext();
+  const { setSearchQuery } = useBookmarkContext();
   const handleClick = () => setSearchQuery(tag.name);
-  const isActive = state.searchQuery.toLowerCase() === tag.name.toLowerCase();
+  const isActive = setSearchQuery.toLowerCase() === tag.name.toLowerCase();
   return (
     <Button 
       variant="outline" 

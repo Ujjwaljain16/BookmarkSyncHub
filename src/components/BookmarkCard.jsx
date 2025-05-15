@@ -3,7 +3,7 @@ import { Card, CardContent, CardFooter } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { Badge } from '@/components/ui/badge';
 import { Trash2, ExternalLink, Clock } from 'lucide-react';
-import { useBookmarkContext } from '@/context/BookmarkContext';
+import { useBookmarkContext } from '../context/BookmarkContext';
 import { formatDistanceToNow } from 'date-fns';
 import PropTypes from 'prop-types';
 

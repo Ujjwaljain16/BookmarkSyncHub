@@ -1,5 +1,5 @@
 import React from 'react';
-import { useBookmarkContext } from '@/context/BookmarkContext';
+import { useBookmarkContext } from '../context/BookmarkContext';
 import {
   Card,
   CardContent,
