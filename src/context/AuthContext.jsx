@@ -44,6 +44,29 @@ export const AuthProvider = ({ children }) => {
     checkSession();
   }, []);
 
+  const sendTokenToExtension = async (token) => {
+    if (window.chrome && window.chrome.runtime && window.chrome.runtime.sendMessage) {
+      try {
+        // Get all installed extensions
+        const extensions = await window.chrome.management.getAll();
+        // Find our extension by name
+        const ourExtension = extensions.find(ext => ext.name === 'BookmarkSyncHub');
+        
+        if (ourExtension) {
+          await window.chrome.runtime.sendMessage(
+            ourExtension.id,
+            { type: 'SET_JWT_TOKEN', token }
+          );
+          console.log('Token sent to extension successfully');
+        } else {
+          console.log('BookmarkSyncHub extension not found');
+        }
+      } catch (error) {
+        console.log('Could not send token to extension:', error);
+      }
+    }
+  };
+
   const login = async (email, password) => {
     try {
       const response = await fetch(`${config.authBaseUrl}/auth/login`, {
@@ -61,6 +84,10 @@ export const AuthProvider = ({ children }) => {
       const data = await response.json();
       localStorage.setItem('token', data.token);
       setUser(data.user);
+      
+      // Send token to Chrome extension
+      await sendTokenToExtension(data.token);
+      
       toast.success('Logged in successfully');
       return data.user;
     } catch (error) {
@@ -86,6 +113,10 @@ export const AuthProvider = ({ children }) => {
       const data = await response.json();
       localStorage.setItem('token', data.token);
       setUser(data.user);
+      
+      // Send token to Chrome extension
+      await sendTokenToExtension(data.token);
+      
       toast.success('Registered successfully');
       return data.user;
     } catch (error) {
