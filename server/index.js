@@ -34,6 +34,9 @@ app.get('/health', (req, res) => {
 // In-memory user storage (replace with a database in production)
 const users = [];
 
+// In-memory bookmarks storage (replace with DB in production)
+const bookmarks = [];
+
 // Authentication middleware
 const authenticateToken = (req, res, next) => {
   try {
@@ -171,6 +174,42 @@ app.get('/api/auth/me', authenticateToken, (req, res) => {
     console.error('Get user error:', error);
     res.status(500).json({ error: 'Failed to get user data' });
   }
+});
+
+// Get all bookmarks for the logged-in user
+app.get('/api/bookmarks', authenticateToken, (req, res) => {
+  const userBookmarks = bookmarks.filter(b => b.userId === req.user.id);
+  res.json(userBookmarks);
+});
+
+// Add a new bookmark
+app.post('/api/bookmarks', authenticateToken, (req, res) => {
+  const { url, title, description, category, tags } = req.body;
+  if (!url || !title) {
+    return res.status(400).json({ error: 'URL and title are required' });
+  }
+  const bookmark = {
+    id: uuidv4(),
+    userId: req.user.id,
+    url,
+    title,
+    description: description || '',
+    category: category || 'other',
+    tags: tags || [],
+    createdAt: new Date().toISOString()
+  };
+  bookmarks.push(bookmark);
+  res.status(201).json(bookmark);
+});
+
+// Delete a bookmark by ID
+app.delete('/api/bookmarks/:id', authenticateToken, (req, res) => {
+  const index = bookmarks.findIndex(b => b.id === req.params.id && b.userId === req.user.id);
+  if (index === -1) {
+    return res.status(404).json({ error: 'Bookmark not found' });
+  }
+  bookmarks.splice(index, 1);
+  res.status(204).send();
 });
 
 // Error handling middleware
