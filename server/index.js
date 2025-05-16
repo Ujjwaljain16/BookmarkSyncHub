@@ -186,6 +186,7 @@ app.get('/api/auth/me', authenticateToken, (req, res) => {
 
 // Get all bookmarks for the logged-in user
 app.get('/api/bookmarks', authenticateToken, (req, res) => {
+  console.log('--- /api/bookmarks handler called for user:', req.user);
   const userBookmarks = bookmarks.filter(b => b.userId === req.user.id);
   res.json(userBookmarks);
 });
